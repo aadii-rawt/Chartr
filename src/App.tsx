@@ -10,6 +10,7 @@ import NearBy from "./pages/NearBy";
 import Help from "./pages/Help";
 import Profile from "./pages/Profile";
 import Booking from "./pages/Booking";
+import Ticket from "./pages/Ticket";
 
 const App = () => {
   const router = createBrowserRouter(([
@@ -38,6 +39,10 @@ const App = () => {
     {
       path : "/profile",
       element : <Profile />
+    },
+    {
+      path : "/ticket",
+      element : <Ticket />
     },
     {
       path : "/passForm",

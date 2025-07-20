@@ -4,14 +4,14 @@ import { Link } from 'react-router-dom'
 
 const PassCard = () => {
     return (
-        <Link to='/monthlyPass'>
-            <div className='p-4'>
 
-                <div className="flex justify-between items-center mb-4">
-                    <span className="font-medium">Bus Pass</span>
-                    <span className="text-sm">View all passes</span>
-                </div>
+        <div className='p-4'>
 
+            <div className="flex justify-between items-center mb-4">
+                <span className="font-medium">Bus Pass</span>
+                <span className="text-sm">View all passes</span>
+            </div>
+            <Link to='/monthlyPass'>
                 <div className="rounded-xl  overflow-hidden bg-green-100 border border-gray-300 relative">
                     <div className='bg-white p-3 py-1.5 rounded-b-xl'>
                         <div className='flex gap-3 text-sm'>
@@ -26,8 +26,8 @@ const PassCard = () => {
                         <p>Click on pass to view</p>
                     </div>
                 </div>
-            </div>
-        </Link>
+            </Link>
+        </div>
     )
 }
 
