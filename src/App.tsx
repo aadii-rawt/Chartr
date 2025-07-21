@@ -12,6 +12,7 @@ import Profile from "./pages/Profile";
 import Booking from "./pages/Booking";
 import Ticket from "./pages/Ticket";
 import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
 const App = () => {
   const router = createBrowserRouter(([
@@ -68,6 +69,10 @@ const App = () => {
     {
       path : "/login",
       element : <Login />
+    },
+    {
+      path : "/signup",
+      element : <Signup />
     },
   ]))
   return (

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../../firebase'; 
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
 
 const Login = () => {
@@ -12,17 +12,17 @@ const Login = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  useEffect(() => {
-      const storedUser = localStorage.getItem('user');
-      if (storedUser) {
-        try {
-          setUser(JSON.parse(storedUser));
-          navigate('/');
-        } catch (err) {
-          console.log('');
-        }
-      }
-    }, []);
+  // useEffect(() => {
+  //     const storedUser = localStorage.getItem('user');
+  //     if (storedUser) {
+  //       try {
+  //         setUser(JSON.parse(storedUser));
+  //         navigate('/');
+  //       } catch (err) {
+  //         console.log('');
+  //       }
+  //     }
+  //   }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,7 +56,7 @@ const Login = () => {
   };
 
   return (
-    <div className="max-w-sm mx-auto mt-10 p-4 bg-white rounded shadow space-y-4">
+    <div className="max-w-sm mx-auto min-h-screen p-4 bg-white rounded shadow space-y-4 flex items-center justify-center flex-col">
       <h2 className="text-xl font-bold text-center">Login</h2>
 
       <form onSubmit={handleLogin} className="space-y-3">
@@ -84,6 +84,8 @@ const Login = () => {
           Login
         </button>
       </form>
+
+      <Link to='/signup' className='text-blue-500 underline'>Create your account</Link>
     </div>
   );
 };
