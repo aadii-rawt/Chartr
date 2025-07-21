@@ -2,14 +2,72 @@ import React, { useState } from 'react';
 import { FaUserCircle } from 'react-icons/fa';
 import { FaArrowLeftLong } from 'react-icons/fa6';
 import { IoMdBus } from 'react-icons/io';
-import { Link } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom';
+import { useUser } from '../context/UserContext';
+import { db } from '../../firebase';
+import { uploadToCloudinary } from "../../cloudinary";
+import { addDoc, arrayUnion, collection, doc, getDoc, serverTimestamp, setDoc, Timestamp, updateDoc } from 'firebase/firestore';
 const BusPassForm: React.FC = () => {
   const [name, setName] = useState('Aditya Rawat');
   const [phone, setPhone] = useState('9599518124');
   const [dob, setDob] = useState('2025-07-18');
   const [idType, setIdType] = useState('Aadhar Card');
   const [idDigits, setIdDigits] = useState('');
+  const [image, setImage] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const { user } = useUser()
+  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
+
+  const handlePay = async () => {
+    if (!user?.uid) return alert('User not logged in');
+
+    let imageUrl = '';
+    if (image) {
+      try {
+        imageUrl = await uploadToCloudinary(image);
+      } catch (err) {
+        console.error('Cloudinary upload error:', err);
+        return alert('Image upload failed.');
+      }
+    }
+
+    const passData = {
+      userImage: imageUrl,
+      name,
+      phone,
+      dob,
+      idType,
+      last4Digits: idDigits,
+      fare: 1000,
+      validUntil: '2025-08-17T23:59:00',
+      createdAt: Timestamp.now(),
+    };
+
+    try {
+      setLoading(true)
+      const userPassDocRef = doc(db, 'passes', user.uid);
+      const docSnap = await getDoc(userPassDocRef);
+
+      if (docSnap.exists()) {
+        await updateDoc(userPassDocRef, {
+          passes: arrayUnion(passData),
+        });
+      } else {
+        await setDoc(userPassDocRef, {
+          passes: [passData],
+        });
+      }
+      navigate("/monthlyPass")
+      setLoading(false)
+    } catch (error) {
+      console.error('Error saving pass:', error);
+      alert('Failed to save pass.');
+      setLoading(false)
+    } finally {
+      setLoading(false)
+    }
+  };
 
   return (
     <div className="max-w-md mx-auto bg-gray-200 p-3 pb-4 rounded-xl shadow-md space-y-4">
@@ -61,11 +119,33 @@ const BusPassForm: React.FC = () => {
         <h2 className="text-xl font-bold">Personal Details</h2>
 
         <div className="flex items-center gap-4 mt-2">
-          <div className="w-20 h-20 bg-black text-yellow-400 rounded-full flex items-center justify-center">
-            <FaUserCircle size={100} />
-          </div>
+          {previewUrl ? <div>
+            <img src={previewUrl} alt="preview" className='w-24 h-24 rounded' />
+          </div> :
+            <div className="w-20 h-20 bg-black text-yellow-400 rounded-full flex items-center justify-center">
+              <FaUserCircle size={100} />
+            </div>}
+          <input
+            type="file"
+            accept="image/*"
+            capture="environment"
+            id="cameraInput"
+            style={{ display: 'none' }}
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) {
+                setImage(file);
+                setPreviewUrl(URL.createObjectURL(file));
+              }
+            }}
+          />
+          <button
+            className="bg-cyan-500 w-fit text-white px-4 py-2 rounded-md"
+            onClick={() => document.getElementById('cameraInput')?.click()}
+          >
+            Capture
+          </button>
 
-          <button className="bg-cyan-500 w-fit text-white px-4 py-2 rounded-md">Capture</button>
         </div>
 
         <input
@@ -109,8 +189,8 @@ const BusPassForm: React.FC = () => {
       </div>
 
       <div className=''>
-        <button className="w-full  bg-cyan-500 text-white py-3 rounded-md font-bold">
-          Pay ₹1001.0
+        <button disabled={loading} onClick={handlePay} className="w-full  bg-cyan-500 text-white py-3 rounded-md font-bold">
+         {loading ? "Loading..." : " Pay ₹1001.0" }
         </button>
 
       </div>

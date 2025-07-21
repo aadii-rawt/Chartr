@@ -13,7 +13,7 @@ const FeatureButton = ({ icon, label, newBadge, wallet, route }: Props) => {
             <div className={`relative min-w-[65px] min-h-[65px] flex items-center justify-center bg-blue-100 p-3 rounded-lg ${wallet ? 'w-full text-left !bg-[#445eab]' : ''}`}>
                 {icon}
                 {newBadge && (
-                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] px-1 rounded-full">New</span>
+                    <span className="absolute top-[-6px] left-1/2 -translate-x-1/2 bg-red-500 text-white text-[13px] px-1 rounded-full animation animate-pulse">New</span>
                 )}
             </div>
             <span className="mt-1 text-xs text-gray-700">{label}</span>

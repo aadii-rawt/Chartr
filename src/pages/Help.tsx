@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 const Help = () => {
   return (
     <div >
-      <header className=' border-b p-4 py-3 border-gray-200 shadow flex gap-3 items-center text-sm'>
+      <header className=' border-b p-4 py-3 border-gray-200 shadow flex gap-3 items-center'>
       <Link to='/' > <GoArrowLeft size={20} /> </Link><span>Support </span>
       </header>
 

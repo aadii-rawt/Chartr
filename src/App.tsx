@@ -11,6 +11,7 @@ import Help from "./pages/Help";
 import Profile from "./pages/Profile";
 import Booking from "./pages/Booking";
 import Ticket from "./pages/Ticket";
+import Login from "./pages/Login";
 
 const App = () => {
   const router = createBrowserRouter(([
@@ -63,6 +64,10 @@ const App = () => {
     {
       path : "/monthlyPass",
       element : <MonthlyPass />
+    },
+    {
+      path : "/login",
+      element : <Login />
     },
   ]))
   return (
