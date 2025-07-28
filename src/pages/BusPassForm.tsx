@@ -9,7 +9,7 @@ import { uploadToCloudinary } from "../../cloudinary";
 import { addDoc, arrayUnion, collection, doc, getDoc, serverTimestamp, setDoc, Timestamp, updateDoc } from 'firebase/firestore';
 const BusPassForm: React.FC = () => {
   const [name, setName] = useState('Aditya Rawat');
-  const [phone, setPhone] = useState('9599518124');
+  const [phone, setPhone] = useState('9342397329');
   const [dob, setDob] = useState('2025-07-18');
   const [idType, setIdType] = useState('Aadhar Card');
   const [idDigits, setIdDigits] = useState('');

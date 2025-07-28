@@ -54,8 +54,8 @@ const Signup = () => {
 
             <div className='flex items-center justify-center flex-col'>
                 <h1 className='text-center mt-3 font-medium'>Send message on this mail for demo and Purcase app</h1>
-                <p className='text-center'>sahil@gmail.com</p>
-                <a href="mailto:rawatadii060@gmail.com"
+                <p className='text-center'>empirespear95@gmail.com</p>
+                <a href="mailto:empirespear95@gmail.com"
                     className="relative cursor-pointer mt-5 opacity-90 hover:opacity-100 transition-opacity p-[2px] bg-black rounded-[16px] bg-gradient-to-t from-[#8122b0] to-[#dc98fd] active:scale-95"
                 >
                     <span

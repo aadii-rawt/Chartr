@@ -12,17 +12,17 @@ const Login = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //     const storedUser = localStorage.getItem('user');
-  //     if (storedUser) {
-  //       try {
-  //         setUser(JSON.parse(storedUser));
-  //         navigate('/');
-  //       } catch (err) {
-  //         console.log('');
-  //       }
-  //     }
-  //   }, []);
+  useEffect(() => {
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        try {
+          setUser(JSON.parse(storedUser));
+          navigate('/');
+        } catch (err) {
+          console.log('');
+        }
+      }
+    }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
