@@ -69,7 +69,7 @@ const BusQRScanner: React.FC = () => {
   };
 
   return (
-    <div className="relative h-screen bg-black w-full">
+    <div className="relative mx-auto max-w-md h-screen bg-black w-full">
       {/* Camera Feed */}
       <video
         ref={videoRef}

@@ -7,10 +7,9 @@ import { useUser } from '../context/UserContext';
 
 const DailyPassForm: React.FC = () => {
   const { user } = useUser()
-  console.log(user);
 
-  const [name, setName] = useState(user?.username || 'Aditya ');
-  const [phone, setPhone] = useState(user?.phone || 9876543214);
+  const [name, setName] = useState(user?.username || 'adi ');
+  const [phone, setPhone] = useState(user?.phone || 9638527410);
   const [age, setAge] = useState(20);
   const [idType, setIdType] = useState('Aadhar Card');
   const [idDigits, setIdDigits] = useState('');
@@ -84,14 +83,14 @@ const DailyPassForm: React.FC = () => {
           onChange={(e) => setAge(e.target.value)}
           className="w-full border border-gray-300 rounded-md text-sm p-2 mt-2"
         />
+      </div>
 
-        <div className='fixed bottom-10 left-0 right-0 mx-3'>
+        <div className=''>
           <button className="w-full  bg-cyan-500 text-white py-3 rounded-md font-bold">
-            Pay ₹1001.0
+            Pay ₹50.0
           </button>
 
         </div>
-      </div>
 
     </div>
   );

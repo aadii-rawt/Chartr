@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { FaUserCircle } from 'react-icons/fa';
 import { FaArrowLeftLong } from 'react-icons/fa6';
 import { IoMdBus } from 'react-icons/io';
@@ -8,44 +8,67 @@ import { db } from '../../firebase';
 import { uploadToCloudinary } from "../../cloudinary";
 import { addDoc, arrayUnion, collection, doc, getDoc, serverTimestamp, setDoc, Timestamp, updateDoc } from 'firebase/firestore';
 const BusPassForm: React.FC = () => {
-  const [name, setName] = useState('Aditya Rawat');
-  const [phone, setPhone] = useState('9342397329');
-  const [dob, setDob] = useState('2025-07-18');
+  const { user } = useUser()
+  const [name, setName] = useState(user?.username || '');
+  const [phone, setPhone] = useState(user?.phone || '');
+  const [dob, setDob] = useState('');
   const [idType, setIdType] = useState('Aadhar Card');
   const [idDigits, setIdDigits] = useState('');
   const [image, setImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const { user } = useUser()
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
+  const validUntilDate = useMemo(() => {
+    const today = new Date();
+    const futureDate = new Date(today);
+    futureDate.setDate(today.getDate() + 30);
+
+    // Format as DD/MM/YYYY
+    const day = String(futureDate.getDate()).padStart(2, '0');
+    const month = String(futureDate.getMonth() + 1).padStart(2, '0');
+    const year = futureDate.getFullYear();
+
+    return `23:59, ${day}/${month}/${year}`;
+  }, []);
+
+  const validUntilISO = useMemo(() => {
+    const today = new Date();
+    const futureDate = new Date(today);
+    futureDate.setDate(today.getDate() + 30);
+    futureDate.setHours(23, 59, 0, 0);
+
+    return futureDate.toISOString();
+  }, []);
+
   const handlePay = async () => {
     if (!user?.uid) return alert('User not logged in');
-
-    let imageUrl = '';
-    if (image) {
-      try {
-        imageUrl = await uploadToCloudinary(image);
-      } catch (err) {
-        console.error('Cloudinary upload error:', err);
-        return alert('Image upload failed.');
-      }
-    }
-
-    const passData = {
-      userImage: imageUrl,
-      name,
-      phone,
-      dob,
-      idType,
-      last4Digits: idDigits,
-      fare: 1000,
-      validUntil: '2025-08-17T23:59:00',
-      createdAt: Timestamp.now(),
-    };
+    if(user?.username == "demo") return alert("Demo user cannot book pass") 
 
     try {
-      setLoading(true)
+      
+      setLoading(true);
+      let imageUrl = '';
+      if (image) {
+        try {
+          imageUrl = await uploadToCloudinary(image);
+        } catch (err) {
+          console.error('Cloudinary upload error:', err);
+          return alert('Image upload failed.');
+        }
+      }
+
+      const passData = {
+        userImage: imageUrl,
+        name,
+        phone,
+        dob,
+        idType,
+        last4Digits: idDigits,
+        fare: 1000,
+        validUntil: validUntilISO,
+        createdAt: Timestamp.now(),
+      };
       const userPassDocRef = doc(db, 'passes', user.uid);
       const docSnap = await getDoc(userPassDocRef);
 
@@ -70,7 +93,7 @@ const BusPassForm: React.FC = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-gray-200 p-3 pb-4 rounded-xl shadow-md space-y-4">
+    <div className="max-w-md mx-auto bg-gray-200 p-3 pb-4 shadow-md space-y-4">
       <Link to="/" className='mt-2' ><FaArrowLeftLong size={20} /></Link>
 
       <div className='bg-white mt-3 rounded-lg p-3'>
@@ -99,7 +122,7 @@ const BusPassForm: React.FC = () => {
         <label className="block text-sm mt-4">Valid Till</label>
         <input
           type="text"
-          value="23:59, 17/08/2025"
+          value={validUntilDate}
           readOnly
           className="w-full border text-sm border-gray-300 rounded-md p-2 bg-gray-100"
         />
@@ -190,7 +213,7 @@ const BusPassForm: React.FC = () => {
 
       <div className=''>
         <button disabled={loading} onClick={handlePay} className="w-full  bg-cyan-500 text-white py-3 rounded-md font-bold">
-         {loading ? "Loading..." : " Pay ₹1001.0" }
+          {loading ? "Loading..." : " Pay ₹1000"}
         </button>
 
       </div>

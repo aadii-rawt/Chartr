@@ -68,12 +68,12 @@ const MonthlyPass: React.FC = () => {
   }
 
   // UI values
-  const passengerImage = latestPass?.userImage || 'https://via.placeholder.com/80x100.png?text=Photo';
-  const passengerName = latestPass?.name || 'Aditya';
+  const passengerImage = latestPass?.userImage ;
+  const passengerName = latestPass?.name ;
   const verificationDoc = latestPass
     ? `${latestPass.idType} - ${latestPass.last4Digits}`
     : 'Aadhar Card - 5328';
-  const passId = latestPass?.passId || 'MP03042025859c482c14';
+  const passId = latestPass?.passId ||`MP${Math.floor(Math.random() * 100)}859cF4482c${Math.floor(Math.random() * 100)}`;
   const fare = latestPass?.fare ?? 1000;
 
   return (
@@ -95,13 +95,13 @@ const MonthlyPass: React.FC = () => {
       <div className="bg-white rounded-xl p-4 mb-4 mt-10 shadow">
         <div className="flex gap-4">
           <img
-            src={passengerImage}
+            src={passengerImage ? passengerImage : user?.username == "demo" ? "/demo.jpg" : '/fake.jpeg'}
             alt="Passenger"
             className="w-22 h-24 rounded-md object-cover"
           />
           <div>
             <p className="text-sm text-gray-500">Passenger Name</p>
-            <p className="font-semibold">{passengerName}</p>
+            <p className="font-semibold">{passengerName ? passengerName :  user?.username == "demo" ? "Demo User" : 'adi'}</p>
 
             <p className="text-sm text-gray-500 mt-2">Verification Document</p>
             <p className="font-semibold">{verificationDoc}</p>

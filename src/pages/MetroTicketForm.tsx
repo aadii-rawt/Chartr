@@ -11,7 +11,7 @@ const MetroTicketForm: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col">
+    <div className="min-h-screen mx-auto max-w-md bg-gray-100 flex flex-col">
       {/* Header */}
       <div className="bg-[#0862b7] text-white  h-60 px-4 py-4 flex items-center justify-between">
         <button className="text-white text-2xl">&larr;</button>

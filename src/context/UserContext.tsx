@@ -13,7 +13,7 @@ export const UserProvider = ({ children }) => {
       try {
         setUser(JSON.parse(storedUser));
       } catch (err) {
-        console.log('');
+        console.log(err);
         
       }
     }

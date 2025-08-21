@@ -15,8 +15,8 @@ const Profile = () => {
             <div className='flex gap-3 items-center p-4 py-3'>
                 <div className='w-14 h-14 rounded-full bg-blue-200 flex items-center justify-center'> <FaUser size={28} /></div>
                 <div className='text-sm'>
-                    <h1 className='font-medium text-[15px]'>{user?.username || "Adi" }</h1>
-                    <p>{user?.phone || "9928423479"}</p>
+                    <h1 className='font-medium text-[15px]'>{user?.username || "adi" }</h1>
+                    <p>{user?.phone || "8529637410"}</p>
                 </div>
             </div>
             <div className='mt-4 border-t border-gray-200 p-4 text-[15px] space-y-5'>

@@ -10,7 +10,7 @@ const Ticket: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-orange-500 flex items-center justify-center relative">
+    <div className="min-h-screen max-w-md mx-auto bg-orange-500 flex items-center justify-center relative">
       {!showQR ? (
         <div className="bg-white relative text-black p-5 rounded-lg w-[90%] max-w-md">
           <h1 className="text-xl font-medium text-center">Transport Dept. of Delhi</h1>
