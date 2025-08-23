@@ -77,7 +77,7 @@ const MonthlyPass: React.FC = () => {
   const fare = latestPass?.fare ?? 1000;
 
   return (
-    <div className="bg-cyan-500 min-h-screen max-h-screen p-4 text-black max-w-md mx-auto">
+    <div className="bg-[#3564AC] min-h-screen relative p-4 text-black max-w-md mx-auto">
       {/* Header */}
       <div className="flex justify-between items-center text-white mb-4">
         <Link to="/" className="text-2xl">
@@ -170,7 +170,7 @@ const MonthlyPass: React.FC = () => {
 
       {showQRModal && (
         <div
-          className="fixed inset-0 bg-black/40 bg-opacity-90 flex items-center justify-center z-50"
+          className="fixed inset-0 max-w-md mx-auto bg-black/40 bg-opacity-90 flex items-center justify-center z-50"
           onClick={() => setShowQRModal(false)}
         >
           <div onClick={(e) => e.stopPropagation()} className=' p-5 rounded-xl flex items-center justify-center w-full'>

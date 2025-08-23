@@ -55,6 +55,10 @@ const App = () => {
       element : <DailyPassForm />
     },
     {
+      path : "/dailyPass",
+      element : <DailyPassForm />
+    },
+    {
       path : "/metroPassForm",
       element : <MetroTicketForm />
     },
