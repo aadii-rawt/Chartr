@@ -13,6 +13,7 @@ import Booking from "./pages/Booking";
 import Ticket from "./pages/Ticket";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import DailyPass from "./pages/DailyPass";
 
 const App = () => {
   const router = createBrowserRouter(([
@@ -56,7 +57,7 @@ const App = () => {
     },
     {
       path : "/dailyPass",
-      element : <DailyPassForm />
+      element : <DailyPass />
     },
     {
       path : "/metroPassForm",
