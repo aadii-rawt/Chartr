@@ -63,7 +63,7 @@ const DailyPassForm: React.FC = () => {
         await setDoc(userRef, existingData);
       }
 
-      navigate("/")
+      navigate("/dailyPass");
     } catch (error) {
       console.log("Error", "Could not store pass: " + error.message);
     } finally{

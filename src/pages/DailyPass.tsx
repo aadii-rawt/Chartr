@@ -7,17 +7,25 @@ import { Link } from 'react-router-dom';
 import { doc, getDoc, Timestamp } from 'firebase/firestore';
 import { db } from '../../firebase';
 
+const formatDate = (date: Date, time: string) => {
+    const options: Intl.DateTimeFormatOptions = {
+        day: '2-digit',
+        month: 'short',
+        year: '2-digit',
+    };
+    const formattedDate = date.toLocaleDateString('en-US', options).replace(',', ',');
+    return `${formattedDate} | ${time}`;
+};
+
 const DailyPass = () => {
 
     const { user } = useUser()
-
     const [passData, setPassData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [showQR, setShowQR] = useState(false);
 
     useEffect(() => {
-        const fetchPassData = async () => {
-            console.log(user);
+        const fetchPassData = async (user) => {
 
             if (!user) return;
             try {
@@ -38,29 +46,34 @@ const DailyPass = () => {
             }
             setLoading(false);
         };
-        fetchPassData();
+        fetchPassData(user);
 
-    }, []);
-    const handleClose = () => {
-        // Replace with actual navigation logic
-        console.log('Navigate to home');
-    };
+    }, [user]);
 
-    const handleAllPasses = () => {
-        // Replace with actual navigation logic
-        console.log('Navigate to all passes');
-    };
 
-    // if (loading) {
-    //     return (
-    //         <div className="min-h-screen bg-red-600 flex items-center justify-center">
-    //             <div className="text-white text-lg">Loading...</div>
-    //         </div>
-    //     );
-    // }
+
+    // Fallback hardcoded dates
+    const fallbackFromDate = new Date();
+    fallbackFromDate.setDate(fallbackFromDate.getDate() - 7);
+    fallbackFromDate.setHours(7, 30, 0, 0);
+
+    const fallbackTillDate = new Date(fallbackFromDate);
+    fallbackTillDate.setDate(fallbackFromDate.getDate());
+    fallbackTillDate.setHours(23, 59, 0, 0);
+
+    let validFrom = fallbackFromDate;
+    let validTill = fallbackTillDate;
+
+    if (passData?.createdAt?.seconds) {
+        validFrom = new Date(passData.createdAt.seconds * 1000);
+
+        validTill = new Date(validFrom);
+        validTill.setDate(validFrom.getDate());
+        validTill.setHours(23, 59, 0, 0);
+    }
 
     return (
-        <div className="min-h-screen max-w-md mx-auto bg-red-600 flex items-center justify-center p-4 relative">
+        <div className="min-h-screen max-w-md mx-auto bg-[#d83737] flex items-center justify-center p-4 relative">
             {/* Header Navigation */}
             <div className="absolute top-3 left-4 right-4 flex items-center justify-between">
                 <Link
@@ -69,13 +82,11 @@ const DailyPass = () => {
                 >
                     <RxCross2 size={22} />
                 </Link>
-                <button
-                    onClick={handleAllPasses}
+                <Link to='/booking'
                     className="flex items-center gap-2 text-white hover:text-gray-200 transition-colors"
                 >
-                    <CgLock size={22} />
                     <span className="text-sm">All Passes</span>
-                </button>
+                </Link>
             </div>
 
             {/* Main Content */}
@@ -101,7 +112,7 @@ const DailyPass = () => {
 
                         <div className="flex items-center justify-between">
                             <span className="">
-                                {passData?.name || "Rohit"}
+                                {passData?.name || "Adi"}
                             </span>
                             <span className="text-lg font-medium">AC</span>
                         </div>
@@ -116,24 +127,24 @@ const DailyPass = () => {
                         <div className="pt-1">
                             <div className="text-sm">Booking Time</div>
                             <div className="text-lg">
-                                {passData?.createdAt}
+                                {formatDate(validFrom || new Date(), '07:06 AM')}
                             </div>
                         </div>
 
                         <div className="pt-1">
                             <div className="text-sm">Validity Time</div>
                             <div className="text-lg">
-                                {passData?.validTill}
+                                {formatDate(validTill || new Date(), '11:59 PM')}
                             </div>
                         </div>
 
                         <div className="text-gray-400 text-sm text-center py-2">
-                            {/* DL{idDate}ruhfrdae */}
+                            DL{new Date().toLocaleDateString("en-GB").replace(/\//g, '')}ruhfrdae
                         </div>
 
                         <button
                             onClick={() => setShowQR(!showQR)}
-                            className="w-full bg-red-600 hover:bg-red-700 transition-colors p-2 flex items-center justify-center gap-2 rounded"
+                            className="w-full bg-[#d83737] transition-colors p-2 flex items-center justify-center gap-2 rounded"
                         >
                             <BsQrCode size={28} className="text-white" />
                             <span className="text-white text-sm">Show QR Code</span>
