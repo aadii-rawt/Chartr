@@ -85,9 +85,9 @@ const MonthlyPass: React.FC = () => {
         </Link>
         <div className="flex items-center gap-4 text-sm">
           <span className="text-yellow-300">⚠️ Issue with pass?</span>
-          <a href="#" className="underline">
+          <Link to='/booking' className="underline">
             All passes
-          </a>
+          </Link>
         </div>
       </div>
 

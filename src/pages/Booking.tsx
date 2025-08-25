@@ -16,7 +16,6 @@ const Booking = () => {
                 <PassCard />
                 <TicketCard />
                 <MetroCard />
-
             </div>
         </div>
     )

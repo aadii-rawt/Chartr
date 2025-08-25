@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { GoArrowLeft } from 'react-icons/go';
+import { Link } from 'react-router-dom';
 
 const MetroTicketForm: React.FC = () => {
   const [startStation, setStartStation] = useState('');
@@ -13,27 +15,24 @@ const MetroTicketForm: React.FC = () => {
   return (
     <div className="min-h-screen mx-auto max-w-md bg-gray-100 flex flex-col">
       {/* Header */}
-      <div className="bg-[#0862b7] text-white  h-60 px-4 py-4 flex items-center justify-between">
-        <button className="text-white text-2xl">&larr;</button>
-        <div className="text-white font-bold text-lg">DELHI METRO</div>
-        <div className="bg-green-400 w-10 h-10 rounded-full flex items-center justify-center">
-          <svg
-            className="w-5 h-5 text-white"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm.75 12.25h-1.5v-1.5h1.5v1.5zm0-3h-1.5V5.75h1.5v3.5z" />
-          </svg>
+      <div className="bg-[#0862b7] text-white px-4 py-4 ">
+        <Link to="/" className="text-2xl">
+          <GoArrowLeft />
+        </Link>
+
+        <div className='flex items-center justify-center'>
+
+          <img src="/delhimetro.png" alt="" className='w-46' />
         </div>
       </div>
 
       {/* Form Card */}
-      <div className="bg-white rounded-xl shadow-md p-4 mx-4 mt-[-20px] z-10 relative">
+      <div className="bg-white rounded-xl shadow-md p-4 mx-4 mt-[-40px] z-10 relative">
         {/* From Station */}
         <div className="mb-4">
           <div className="flex items-center gap-2 border border-gray-300 rounded-md px-3 py-2">
             <span className="w-3 h-3 bg-black rounded-full"></span>
-             <input
+            <input
               className="w-full border-none outline-none"
               placeholder="Starting stop"
               value={startStation}
