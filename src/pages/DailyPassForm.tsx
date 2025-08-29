@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
 import { db } from '../../firebase';
 import { doc, getDoc, setDoc, Timestamp } from 'firebase/firestore';
+
 const DailyPassForm: React.FC = () => {
   const { user } = useUser()
 
@@ -37,10 +38,12 @@ const DailyPassForm: React.FC = () => {
   }, []);
 
   const handleSubmit = async () => {
-    if (!age || !name || !phone ) {
+    if (!age || !name || !phone) {
       alert("Please fill in all fields.");
       return;
     }
+
+    if (user?.username == "demo") return alert("Demo user can not book pass")
 
     const passData = {
       name,
@@ -66,7 +69,7 @@ const DailyPassForm: React.FC = () => {
       navigate("/dailyPass");
     } catch (error) {
       console.log("Error", "Could not store pass: " + error.message);
-    } finally{
+    } finally {
       setLoading(false)
     }
   };
@@ -156,7 +159,6 @@ const DailyPassForm: React.FC = () => {
         <button onClick={handleSubmit} className="w-full  bg-cyan-500 text-white py-3 rounded-md font-bold">
           Pay ₹50.0
         </button>
-
       </div>
 
     </div>

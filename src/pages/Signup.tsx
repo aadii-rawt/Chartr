@@ -3,6 +3,30 @@ import React from 'react'
 const Signup = () => {
     return (
         <div className="max-w-sm mx-auto min-h-screen p-4 bg-white rounded shadow space-y-4 flex items-center justify-center flex-col">
+             <div className="card">
+                <div className="pricing-block-content">
+                    <p className="pricing-plan">Basic</p>
+                    <div className="price-value" data-currency="$ USD" data-currency-simple="USD">
+                        <p className="price-number">₹<span className="price-integer">100</span></p>
+                        {/* <div id="priceDiscountCent">/month</div> */}
+                    </div>
+                    {/* <div className="pricing-note">For 1 month</div> */}
+                    <ul className="check-list" role="list">
+                        <li className="check-list-item">
+                            ✔️  4 Free Daily Pass
+                        </li>
+                        <li className="check-list-item">
+                            ❌   Free Monthly Pass
+                        </li>
+                        <li className="check-list-item">
+                            ❌  Offline mode
+                        </li>
+                        <li className="check-list-item">
+                            ❌  Daily Ticket
+                        </li>
+                    </ul>
+                </div>
+            </div>
             <div className="card">
                 <div className="pricing-block-content">
                     <p className="pricing-plan">Starter</p>
