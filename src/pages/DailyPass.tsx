@@ -54,7 +54,7 @@ const DailyPass = () => {
 
     // Fallback hardcoded dates
     const fallbackFromDate = new Date();
-    fallbackFromDate.setDate(fallbackFromDate.getDate() - 7);
+    fallbackFromDate.setDate(fallbackFromDate.getDate());
     fallbackFromDate.setHours(7, 30, 0, 0);
 
     const fallbackTillDate = new Date(fallbackFromDate);
@@ -112,7 +112,7 @@ const DailyPass = () => {
 
                         <div className="flex items-center justify-between">
                             <span className="">
-                                {passData?.name || "Adi"}
+                                {passData?.name ? passData?.name : user?.username == "demo" ? "Demo User" : 'adi'}
                             </span>
                             <span className="text-lg font-medium">AC</span>
                         </div>
