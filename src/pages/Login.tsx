@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '../../firebase';
 import { Link, useNavigate } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
@@ -29,11 +29,9 @@ const Login = () => {
     setError('');
 
     try {
-      // Firebase Auth Login
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const uid = userCredential.user.uid;
 
-      // Fetch user profile from Firestore
       const userDocRef = doc(db, 'users', uid);
       const userSnapshot = await getDoc(userDocRef);
 
@@ -43,19 +41,16 @@ const Login = () => {
 
       const userData = userSnapshot.data();
 
-      // 🚨 Check loginDevices flag
       if (userData.loginDevices === 1) {
         alert('User already logged in on another device.');
-        // Sign out immediately so Firebase Auth session isn't kept
         await auth.signOut();
         return;
       }
 
-      // Store in Context + LocalStorage
-      setUser({ uid, ...userData });
-      localStorage.setItem('user', JSON.stringify({ uid, ...userData }));
+      await updateDoc(userDocRef, { loginDevices: 1 });
 
-      // Redirect
+      setUser({ uid, ...userData, loginDevices: 1 });
+      localStorage.setItem('user', JSON.stringify({ uid, ...userData, loginDevices: 1 }));
       navigate('/');
     } catch (err: any) {
       setError(err.message || 'Login failed');
