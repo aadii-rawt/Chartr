@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
-import { auth, db } from '../../firebase'; 
+import { auth, db } from '../../firebase';
 import { Link, useNavigate } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
 
@@ -13,16 +13,16 @@ const Login = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-      const storedUser = localStorage.getItem('user');
-      if (storedUser) {
-        try {
-          setUser(JSON.parse(storedUser));
-          navigate('/');
-        } catch (err) {
-          console.log('');
-        }
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      try {
+        setUser(JSON.parse(storedUser));
+        navigate('/');
+      } catch (err) {
+        console.log('');
       }
-    }, []);
+    }
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,13 +43,20 @@ const Login = () => {
 
       const userData = userSnapshot.data();
 
+      // 🚨 Check loginDevices flag
+      if (userData.loginDevices === 1) {
+        alert('User already logged in on another device.');
+        // Sign out immediately so Firebase Auth session isn't kept
+        await auth.signOut();
+        return;
+      }
+
       // Store in Context + LocalStorage
       setUser({ uid, ...userData });
       localStorage.setItem('user', JSON.stringify({ uid, ...userData }));
 
-      // Redirect (optional)
-      navigate('/'); // or wherever
-
+      // Redirect
+      navigate('/');
     } catch (err: any) {
       setError(err.message || 'Login failed');
     }
@@ -85,7 +92,9 @@ const Login = () => {
         </button>
       </form>
 
-      <Link to='/signup' className='text-blue-500 underline'>Create your account</Link>
+      <Link to="/signup" className="text-blue-500 underline">
+        Create your account
+      </Link>
     </div>
   );
 };
