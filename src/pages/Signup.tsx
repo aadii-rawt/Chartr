@@ -31,6 +31,30 @@ const Signup = () => {
                 <div className="pricing-block-content">
                     <p className="pricing-plan">Starter</p>
                     <div className="price-value" data-currency="$ USD" data-currency-simple="USD">
+                        <p className="price-number">₹<span className="price-integer">250</span></p>
+                        {/* <div id="priceDiscountCent">/month</div> */}
+                    </div>
+                    <div className="pricing-note">For 1 month</div>
+                    <ul className="check-list" role="list">
+                        <li className="check-list-item">
+                            ✔️   Free Daily Pass
+                        </li>
+                        <li className="check-list-item">
+                            ❌   Free Monthly Pass
+                        </li>
+                        <li className="check-list-item">
+                            ❌  Offline mode
+                        </li>
+                        <li className="check-list-item">
+                            ❌  Daily Ticket
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div className="card">
+                <div className="pricing-block-content">
+                    <p className="pricing-plan">Gold</p>
+                    <div className="price-value" data-currency="$ USD" data-currency-simple="USD">
                         <p className="price-number">₹<span className="price-integer">300</span></p>
                         {/* <div id="priceDiscountCent">/month</div> */}
                     </div>
