@@ -8,7 +8,7 @@ import { db } from '../../firebase';
 import { uploadToCloudinary } from "../../cloudinary";
 import { addDoc, arrayUnion, collection, doc, getDoc, serverTimestamp, setDoc, Timestamp, updateDoc } from 'firebase/firestore';
 const BusPassForm: React.FC = () => {
-  const { user } = useUser()
+  const { user, data } = useUser()
   const [name, setName] = useState(user?.username || '');
   const [phone, setPhone] = useState(user?.phone || '');
   const [dob, setDob] = useState('');
@@ -43,10 +43,12 @@ const BusPassForm: React.FC = () => {
 
   const handlePay = async () => {
     if (!user?.uid) return alert('User not logged in');
-    if(user?.username == "demo") return alert("Demo user cannot book pass") 
+    if (user?.username == "demo") return alert("Demo user cannot book pass")
+    if (data.plan === "basic" || data.plan === "starter") return alert("Please upgrade your plan to book pass")
+
 
     try {
-      
+
       setLoading(true);
       let imageUrl = '';
       if (image) {

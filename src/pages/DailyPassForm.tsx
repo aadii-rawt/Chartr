@@ -4,10 +4,11 @@ import { IoMdBus } from 'react-icons/io';
 import { Link, useNavigate } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
 import { db } from '../../firebase';
-import { doc, getDoc, setDoc, Timestamp } from 'firebase/firestore';
+import { doc, getDoc, increment, setDoc, Timestamp, updateDoc } from 'firebase/firestore';
+import validateRolePurchase from "../middleware/middleware";
 
 const DailyPassForm: React.FC = () => {
-  const { user } = useUser()
+  const { user, data } = useUser()
 
   const [name, setName] = useState(user?.username || 'adi ');
   const [phone, setPhone] = useState(user?.phone || 9638527410);
@@ -66,6 +67,10 @@ const DailyPassForm: React.FC = () => {
         await setDoc(userRef, existingData);
       }
 
+
+      if (data.plan == "basic") {
+        basicPlan()
+      }
       navigate("/dailyPass");
     } catch (error) {
       console.log("Error", "Could not store pass: " + error.message);
@@ -73,6 +78,13 @@ const DailyPassForm: React.FC = () => {
       setLoading(false)
     }
   };
+
+
+  const basicPlan = async () => {
+    const userRef = doc(db, 'users', user.uid);
+    await updateDoc(userRef, { dailyPurchased: increment(1) });
+
+  }
 
   return (
     <div className="max-w-md  mx-auto min-h-screen bg-gray-200 p-3 pb-4 relative rounded-xl shadow-md space-y-4">
@@ -156,8 +168,8 @@ const DailyPassForm: React.FC = () => {
       </div>
 
       <div className=''>
-        <button onClick={handleSubmit} className="w-full  bg-cyan-500 text-white py-3 rounded-md font-bold">
-          Pay ₹50.0
+        <button onClick={handleSubmit} disabled={loading} className="w-full  bg-cyan-500 text-white py-3 rounded-md font-bold">
+          {loading ? "Loading..." : "Pay ₹50.0 "}
         </button>
       </div>
 

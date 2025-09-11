@@ -16,7 +16,9 @@ const Profile = () => {
     try {
       if (user?.uid) {
         const userDocRef = doc(db, 'users', user.uid);
-        await updateDoc(userDocRef, { loginDevices: 0 }); // mark device logout
+        if (user.loginDevices) {
+          await updateDoc(userDocRef, { loginDevices: 0 }); // mark device logout
+        }
       }
 
       await auth.signOut();

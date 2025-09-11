@@ -6,6 +6,8 @@ export const useUser = () => useContext(UserContext);
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null)
+  const [data, setData] = useState(null);
+  const [isExpired, setIsExpired] = useState(null)
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -14,13 +16,13 @@ export const UserProvider = ({ children }) => {
         setUser(JSON.parse(storedUser));
       } catch (err) {
         console.log(err);
-        
+
       }
     }
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, data, setData ,isExpired, setIsExpired}}>
       {children}
     </UserContext.Provider>
   );

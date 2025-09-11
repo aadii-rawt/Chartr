@@ -2,9 +2,10 @@ import React, { useEffect } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 import FooterNav from '../components/FooterNav'
 import { useUser } from '../context/UserContext'
+import ExpiredUI from '../components/ExpiredUI'
 
 const Layout = () => {
-  const { user } = useUser()
+  const { user,data, isExpired} = useUser()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -16,8 +17,15 @@ const Layout = () => {
 
   return (
     <div className='max-w-md mx-auto'>
-      <Outlet />
+     {!isExpired && <Outlet /> }
+
+
+
       <FooterNav />
+
+
+
+      {isExpired && <ExpiredUI expired={isExpired} data={data} />}
     </div>
   )
 }

@@ -11,6 +11,7 @@ const Login = () => {
   const { setUser } = useUser();
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -24,38 +25,53 @@ const Login = () => {
     }
   }, []);
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
+ const handleLogin = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setError('');
+  setLoading(true);
 
-    try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const uid = userCredential.user.uid;
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const uid = userCredential.user.uid;
 
-      const userDocRef = doc(db, 'users', uid);
-      const userSnapshot = await getDoc(userDocRef);
+    const userDocRef = doc(db, 'users', uid);
+    const snap = await getDoc(userDocRef);
+    if (!snap.exists()) throw new Error('User profile not found in Firestore');
 
-      if (!userSnapshot.exists()) {
-        throw new Error('User profile not found in Firestore');
-      }
+    const userData = snap.data();
 
-      const userData = userSnapshot.data();
+    // Check whether the field actually exists in Firestore
+    const hasLoginDevicesField = Object.prototype.hasOwnProperty.call(userData, 'loginDevices');
 
-      if (userData.loginDevices === 1) {
+    if (hasLoginDevicesField) {
+      // Treat 1/true as "already logged in"
+      const isAlreadyLoggedIn =
+        userData.loginDevices === 1 || userData.loginDevices === true;
+
+      if (isAlreadyLoggedIn) {
         alert('User already logged in on another device.');
         await auth.signOut();
+        setLoading(false);
         return;
       }
 
       await updateDoc(userDocRef, { loginDevices: 1 });
-
-      setUser({ uid, ...userData, loginDevices: 1 });
-      localStorage.setItem('user', JSON.stringify({ uid, ...userData, loginDevices: 1 }));
-      navigate('/');
-    } catch (err: any) {
-      setError(err.message || 'Login failed');
     }
-  };
+    const finalUser = hasLoginDevicesField
+      ? { uid, ...userData, loginDevices: 1 }
+      : { uid, ...userData };
+
+    setUser(finalUser);
+    localStorage.setItem('user', JSON.stringify(finalUser));
+
+    navigate('/');
+  } catch (err: any) {
+    setError(err?.message || 'Login failed');
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="max-w-sm mx-auto min-h-screen p-4 bg-white rounded shadow space-y-4 flex items-center justify-center flex-col">
@@ -81,9 +97,10 @@ const Login = () => {
         {error && <p className="text-red-500 text-sm">{error}</p>}
         <button
           type="submit"
+          disabled={loading}
           className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
         >
-          Login
+          {loading ? "Loading..." : "Login"}
         </button>
       </form>
 
