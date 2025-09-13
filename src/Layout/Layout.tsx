@@ -16,7 +16,7 @@ const Layout = () => {
   }, [])
 
   return (
-    <div className='max-w-md mx-auto'>
+    <div className='max-w-md mx-auto relative'>
      {!isExpired && <Outlet /> }
 
 

@@ -10,7 +10,7 @@ const FooterNav = () => {
     <div className="fixed bottom-0 text-xl left-0 right-0 bg-white border-t border-gray-200 p-2 flex justify-around max-w-md mx-auto">
       <NavItem icon={<BiHomeAlt2 size={28}   />} label="Home" route="/" />
       <NavItem icon={<HiOutlineLocationMarker size={28}  />} label="Nearby" route="/nearby" />
-      <NavItem icon={<PiTicket size={28}  />} label="Booking" route='/booking' />
+      <NavItem icon={<PiTicket size={28}  />} label="Ticket & Pass" route='/booking' />
       <NavItem icon={<HiOutlineLocationMarker size={28}  />} label="Around me" route='/nearby'/>
       <NavItem icon={<IoMdHelpCircleOutline size={28}  />} label="Help" route='/help' />
     </div>

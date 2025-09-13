@@ -14,6 +14,7 @@ import Ticket from "./pages/Ticket";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import DailyPass from "./pages/DailyPass";
+import NewHome from "./pages/NewHome";
 
 const App = () => {
   const router = createBrowserRouter(([
@@ -23,7 +24,7 @@ const App = () => {
       children : [
         {
           path : "/",
-          element : <Home />
+          element : <NewHome />
         },
         {
           path : "/nearby",
