@@ -35,17 +35,17 @@ const NewHome = () => {
             {/*------------- tickets cards ---------------- */}
 
             <div className='mt-5 px-4'>
-                <p className='text-xs py-3 text-gray-500'>YOUR TRAVEL KIT</p>
+                <p className='text-sm py-3 text-gray-500'>YOUR TRAVEL KIT</p>
                 <TransportHomeCards />
             </div>
 
             {/*------------- current location ---------------- */}
 
             <div className='mt-2 '>
-                <p className='text-xs py-3 text-gray-500 px-4'>AROUND YOU</p>
+                <p className='text-sm py-3 text-gray-500 px-4'>AROUND YOU</p>
                 <img src="/new-map.png" alt="" />
                 <div className='px-4'>
-                    <div className='flex items-center justify-between gap-3 border-b border-gray-300 py-1.5'>
+                    <div className='flex items-center justify-between gap-3 border-b border-gray-300 py-2'>
                         <div className='w-7 h-7 bg-green-700 rounded-full flex items-center justify-center text-white'> <IoMdBus size={18} /></div>
                         <div className='flex-1'>
                             <p className='text-sm '>Maharani Bagh</p>
@@ -85,13 +85,12 @@ const NewHome = () => {
             {/*------------- featured card ---------------- */}
 
             <div className='mt-4'>
-                <p className='text-xs py-3 text-gray-500 px-4'>FEATURED FOR YOU</p>
+                <p className='text-sm py-3 text-gray-500 px-4'>FEATURED FOR YOU</p>
 
                 <img src="/download.jpg" alt="" className='w-' />
                 <div className='py-30 px-4'>
                     <h1 className='text-gray-300 text-3xl font-semibold'>Har Safar</h1>
                     <h1 className='text-gray-300 text-3xl font-semibold'>Ka Saathi</h1>
-
                     <p className='py-5 text-gray-500 text-sm'>Creafted with 💓 in Dilli</p>
                 </div>
 

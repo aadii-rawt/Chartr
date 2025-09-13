@@ -17,7 +17,7 @@ export default function TransportHomeCards() {
         <Link to="busQRScanner" className="row-span-2 relative">
           <div className="relative h-full rounded-xl bg-white border border-zinc-200 shadow-sm overflow-hidden">
             <div className="px-3 py-2">
-              <h1 className="font-bold text-sm">Bus Tickets</h1>
+              <h1 className="font-bold ">Bus Tickets</h1>
               <p className="text-xs text-gray-500">easy booking</p>
               <div className="text-[13px] px-2 py-0.5 mt-2 bg-blue-50  inline-block text-blue-700 font-medium rounded-2xl">10% off</div>
             </div>
@@ -43,11 +43,11 @@ function SmallTile({ title, subtitle, img,link }) {
       <div className="flex w-full items-center justify-between py-1">
         <div className="pl-3">
           <div className="flex items-center gap-2">
-            <p className="font-bold text-sm text-zinc-900 truncate">{title}</p>
+            <p className="font-bold text-zinc-900 truncate">{title}</p>
           </div>
           <p className="text-xs text-zinc-500 mt-0.5 truncate">{subtitle}</p>
         </div>
-        <img src={img} alt="" className="w-10" />
+        <img src={img} alt="" className="w-14" />
       </div>
     </Link >
   );
