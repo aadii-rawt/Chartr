@@ -9,7 +9,7 @@ export default function LocationSearch() {
     <div className="w-full max-w-md mx-auto px-4">
         <div className="bg-white p-3 rounded-2xl shadow">
         <div className="px-5 -mt-10">
-            <div className="bg-white flex shadow justify-between px-2 py-2 rounded-3xl items-center gap-5">
+            <div className="bg-white flex shadow justify-between px-2.5 py-2 rounded-3xl items-center gap-5">
                 <BiLocationPlus size={20} />
                 <input type="text" placeholder="Where are you going?" className="flex-1 py-1 border-none outline-none" />
                 <BiSearch size={20} />

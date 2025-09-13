@@ -22,7 +22,7 @@ export default function TransportHomeCards() {
               <div className="text-[13px] px-2 py-0.5 mt-2 bg-blue-50  inline-block text-blue-700 font-medium rounded-2xl">10% off</div>
             </div>
             <div className="flex justify-end -mt-10">
-              <img src="/bus.png" alt="" className="w-1/2 right-0" />
+              <img src="/bus.png" alt="" className="w-[60%] right-0" />
             </div>
           </div>
         </Link>
@@ -47,7 +47,7 @@ function SmallTile({ title, subtitle, img,link }) {
           </div>
           <p className="text-xs text-zinc-500 mt-0.5 truncate">{subtitle}</p>
         </div>
-        <img src={img} alt="" className="w-14" />
+        <img src={img} alt="" className="w-16" />
       </div>
     </Link >
   );
