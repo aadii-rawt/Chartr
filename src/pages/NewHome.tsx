@@ -4,8 +4,10 @@ import { Link } from 'react-router-dom'
 import LocationSearch from '../components/LocationSearch'
 import TransportHomeCards from '../components/TransportHomeCards'
 import { IoMdBus } from 'react-icons/io'
+import { useUser } from '../context/UserContext'
 
 const NewHome = () => {
+    
     return (
         <div className='min-h-screen  pb-20'>
             <div className='bg-[url("/header-bg.png")] absolute top-0 left-0 -z-10 opacity-70 h-30 w-full bg-bottom bg-cover '>

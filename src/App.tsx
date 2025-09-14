@@ -15,75 +15,107 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import DailyPass from "./pages/DailyPass";
 import NewHome from "./pages/NewHome";
+import AdminLayout from "./Layout/AdminLayout";
+import Dashboard from "./pages/Admin/Dashboard";
+import Pass from "./pages/Admin/Pass";
+import AdminDailyPass from "./pages/Admin/Dailypass";
+import PlansTable from "./pages/Admin/Plan";
+import Users from "./pages/Admin/Users";
+import AdminProtectiveRoute from "./middleware/adminProtectiveRoute";
 
 const App = () => {
   const router = createBrowserRouter(([
     {
-      path : "",
-      element : <Layout />,
-      children : [
+      path: "",
+      element: <Layout />,
+      children: [
         {
-          path : "/",
-          element : <NewHome />
+          path: "/",
+          element: <NewHome />
         },
         {
-          path : "/nearby",
-          element : <NearBy />
+          path: "/nearby",
+          element: <NearBy />
         },
         {
-          path : "/help",
-          element : <Help />
+          path: "/help",
+          element: <Help />
         },
         {
-          path : "/booking",
-          element : <Booking />
+          path: "/booking",
+          element: <Booking />
         }
       ]
     },
     {
-      path : "/profile",
-      element : <Profile />
+      path: "/",
+      element: <AdminProtectiveRoute><AdminLayout /></AdminProtectiveRoute>,
+      children: [{
+        path: "/admin",
+        element: <Dashboard />
+      },
+      {
+        path: "/pass",
+        element: <Pass />
+      },
+      {
+        path: "/dailypass",
+        element: <AdminDailyPass />
+      },
+      {
+        path: "/plans",
+        element: <PlansTable />
+      },
+      {
+        path: "/users",
+        element: <Users />
+      },
+      ]
     },
     {
-      path : "/ticket",
-      element : <Ticket />
+      path: "/profile",
+      element: <Profile />
     },
     {
-      path : "/passForm",
-      element : <BusPassForm />
+      path: "/ticket",
+      element: <Ticket />
     },
     {
-      path : "/dailyPassForm",
-      element : <DailyPassForm />
+      path: "/passForm",
+      element: <BusPassForm />
     },
     {
-      path : "/dailyPass",
-      element : <DailyPass />
+      path: "/dailyPassForm",
+      element: <DailyPassForm />
     },
     {
-      path : "/metroPassForm",
-      element : <MetroTicketForm />
+      path: "/dailyPass",
+      element: <DailyPass />
     },
     {
-      path : "/busQRScanner",
-      element : <BusQRScanner />
+      path: "/metroPassForm",
+      element: <MetroTicketForm />
     },
     {
-      path : "/monthlyPass",
-      element : <MonthlyPass />
+      path: "/busQRScanner",
+      element: <BusQRScanner />
     },
     {
-      path : "/login",
-      element : <Login />
+      path: "/monthlyPass",
+      element: <MonthlyPass />
     },
     {
-      path : "/signup",
-      element : <Signup />
+      path: "/login",
+      element: <Login />
+    },
+    {
+      path: "/signup",
+      element: <Signup />
     },
   ]))
   return (
     <RouterProvider router={router} />
-  
+
   );
 };
 

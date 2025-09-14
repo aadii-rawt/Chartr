@@ -21,8 +21,7 @@ import { db } from '../../firebase';
 const Home = () => {
 
   const { user, data, setData, isExpired, setIsExpired } = useUser()
-
-
+  
   useEffect(() => {
     const fetchData = async () => {
       if (!user?.uid) return;
