@@ -15,7 +15,7 @@ export default function Sidebar() {
       section: "Main",
       links: [
         { href: "/admin", label: "Dashboard", icon: <CiGrid42  /> },
-        { href: "/dailypass", label: "Daily Pass", icon: <BsPass  /> },
+        { href: "/dailypassAdmin", label: "Daily Pass", icon: <BsPass  /> },
         { href: "/pass", label: "Pass", icon: <IoCalendarOutline   /> },
         { href: "/plans", label: "Plans", icon: <LuCrown  /> },
         { href: "/users", label: "Users", icon: <LuUsers  /> },

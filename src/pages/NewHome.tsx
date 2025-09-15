@@ -80,7 +80,7 @@ const NewHome = () => {
                 </div>
 
                 <div className='px-4 mt-3'>
-                    <button className='bg-[#3056A3] text-sm text-center py-2.5 rounded-lg w-full text-white'>Show all nearby stops</button>
+                    <Link to='/nearby' className='bg-[#3056A3] w-full text-sm text-center py-2.5 rounded-lg flex items-center justify-center text-white'>Show all nearby stops</Link>
                 </div>
             </div>
 

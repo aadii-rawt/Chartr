@@ -7,9 +7,10 @@ import { useNavigate } from 'react-router-dom'
 import { useUser } from '../context/UserContext'
 import { auth, db } from '../../firebase'
 import { doc, updateDoc } from 'firebase/firestore'
+import { GoHome } from 'react-icons/go'
 
 const Profile = () => {
-  const { user, setUser } = useUser();
+  const { user, setUser, newHomePage, setNewHomePage } = useUser();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -30,6 +31,10 @@ const Profile = () => {
     }
   };
 
+  const handleNewHomePageToggle = () => {
+    setNewHomePage(!newHomePage);
+    localStorage.setItem('newHomePage', JSON.stringify(!newHomePage));
+  }
   return (
     <div className='max-w-md mx-auto'>
       <header className='px-4 py-3 border-b border-gray-300 shadow'>
@@ -52,6 +57,40 @@ const Profile = () => {
         </div>
         <div className='flex items-center gap-4'>
           <IoTicketSharp className='text-yellow-400' size={24} /><span>My Passes</span>
+        </div>
+        <div className='flex items-center justify-between'>
+          <div className='flex items-center gap-4'>
+            <GoHome size={24} />
+            <span>Use new homepage</span>
+          </div>
+
+          {/* Accessible toggle switch */}
+          <label className='relative inline-flex items-center cursor-pointer'>
+            <input
+              type='checkbox'
+              className='sr-only peer'
+              checked={!!newHomePage}
+              onChange={handleNewHomePageToggle}
+              aria-label='Toggle new homepage'
+              role='switch'
+              aria-checked={!!newHomePage}
+            />
+            <div
+              className="
+          w-11 h-6 rounded-full bg-gray-300
+          peer-focus:outline-none
+          peer-checked:bg-cyan-500
+          transition-colors
+          relative
+          after:content-['']
+          after:absolute after:top-[2px] after:left-[2px]
+          after:w-5 after:h-5 after:bg-white after:rounded-full
+          after:transition-transform
+          peer-checked:after:translate-x-5
+          after:shadow
+        "
+            />
+          </label>
         </div>
         <div className='flex items-center gap-4'>
           <IoMdShare size={24} /><span>Share app</span>

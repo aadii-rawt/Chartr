@@ -8,7 +8,7 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [data, setData] = useState(null);
   const [isExpired, setIsExpired] = useState(null)
-
+  const [newHomePage,setNewHomePage] = useState(localStorage.getItem('newHomePage') ? JSON.parse(localStorage.getItem('newHomePage')) : true)
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
@@ -22,7 +22,7 @@ export const UserProvider = ({ children }) => {
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, setUser, data, setData ,isExpired, setIsExpired}}>
+    <UserContext.Provider value={{ user, setUser, data, setData ,isExpired, setIsExpired,newHomePage,setNewHomePage}}>
       {children}
     </UserContext.Provider>
   );

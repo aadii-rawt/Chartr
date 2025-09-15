@@ -1,6 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Layout from "./Layout/Layout";
-import Home from "./pages/Home";
 import BusPassForm from "./pages/BusPassForm";
 import DailyPassForm from "./pages/DailyPassForm";
 import MetroTicketForm from "./pages/MetroTicketForm";
@@ -22,8 +21,12 @@ import AdminDailyPass from "./pages/Admin/Dailypass";
 import PlansTable from "./pages/Admin/Plan";
 import Users from "./pages/Admin/Users";
 import AdminProtectiveRoute from "./middleware/adminProtectiveRoute";
+import { useUser } from "./context/UserContext";
+import Home from "./pages/Home";
 
 const App = () => {
+
+  const { newHomePage} = useUser()
   const router = createBrowserRouter(([
     {
       path: "",
@@ -31,7 +34,7 @@ const App = () => {
       children: [
         {
           path: "/",
-          element: <NewHome />
+          element: newHomePage ? <NewHome /> : <Home />
         },
         {
           path: "/nearby",
@@ -59,7 +62,7 @@ const App = () => {
         element: <Pass />
       },
       {
-        path: "/dailypass",
+        path: "/dailypassAdmin",
         element: <AdminDailyPass />
       },
       {

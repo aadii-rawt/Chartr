@@ -68,7 +68,7 @@ const DailyPassForm: React.FC = () => {
       }
 
 
-      if (data.plan == "basic") {
+      if (data?.plan == "basic") {
         basicPlan()
       }
       navigate("/dailyPass");

@@ -44,9 +44,6 @@ const Home = () => {
   useEffect(() => {
     if (!data) return;
     const res = checkPlan(data?.plan, data)
-    console.log(res);
-    
-
     if (!res.ok) {
       setIsExpired(res)
     }
