@@ -23,10 +23,11 @@ import Users from "./pages/Admin/Users";
 import AdminProtectiveRoute from "./middleware/adminProtectiveRoute";
 import { useUser } from "./context/UserContext";
 import Home from "./pages/Home";
+import Download from "./pages/Download";
 
 const App = () => {
 
-  const { newHomePage} = useUser()
+  const { newHomePage } = useUser()
   const router = createBrowserRouter(([
     {
       path: "",
@@ -114,6 +115,10 @@ const App = () => {
     {
       path: "/signup",
       element: <Signup />
+    },
+    {
+      path: "/download",
+      element: <Download />
     },
   ]))
   return (
