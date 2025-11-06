@@ -10,22 +10,7 @@ const Header = () => {
     const { user,setUser } = useUser()
     const navigate = useNavigate()
 
-    const handleLogout = async () => {
-        try {
-            if (user?.uid) {
-                const userDocRef = doc(db, 'users', user.uid);
-                if (user.loginDevices) {
-                    await updateDoc(userDocRef, { loginDevices: 0 }); 
-                }
-            }
-            await auth.signOut();
-            localStorage.removeItem('user');
-            setUser(null);
-            navigate('/login');
-        } catch (err) {
-            console.error("Logout failed:", err);
-        }
-    };
+  
     return (
         <div className="h-16 flex  justify-end items-center px-4 border-b border-white/10 text-white">
 

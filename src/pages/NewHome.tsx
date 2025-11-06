@@ -16,7 +16,6 @@ const NewHome = () => {
             {/*------------- header ---------------- */}
             <div className='flex justify-between items-center px-4 py-4'>
                 <div>
-                    <img src="" alt="" />
                     <img src="https://framerusercontent.com/images/yEa4ce8bqOfVAhNkZNCbXV3cgd4.png" alt="" className='w-28' />
                     {/* <h1>Chartr</h1> */}
                 </div>

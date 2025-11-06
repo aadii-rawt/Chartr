@@ -95,7 +95,7 @@ const Profile = () => {
         <div className='flex items-center gap-4'>
           <IoMdShare size={24} /><span>Share app</span>
         </div>
-        <div className='flex items-center gap-4'>
+        <div className='flex items-center gap-4' onClick={() => navigate("/admin")}>
           <HiOutlineDotsHorizontal size={24} /><span>Rate us</span>
         </div>
 

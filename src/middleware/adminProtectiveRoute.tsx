@@ -3,7 +3,7 @@ import { useUser } from '../context/UserContext'
 import { useNavigate } from 'react-router-dom'
 
 const AdminProtectiveRoute = ({ children }) => {
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
     const { user } = useUser()
     const navigate = useNavigate()
 
