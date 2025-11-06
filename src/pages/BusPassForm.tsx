@@ -44,7 +44,7 @@ const BusPassForm: React.FC = () => {
   const handlePay = async () => {
     if (!user?.uid) return alert('User not logged in');
     if (user?.username == "demo") return alert("Demo user cannot book pass")
-    if (data.plan === "basic" || data.plan === "starter") return alert("Please upgrade your plan to book pass")
+    if (data?.plan === "basic" || data?.plan === "starter") return alert("Please upgrade your plan to book pass")
 
 
     try {

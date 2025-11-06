@@ -9,7 +9,10 @@ const AdminProtectiveRoute = ({ children }) => {
 
     useEffect(() => {
         function check() {
-            if(!user) return
+            if(!user) {
+                navigate("/login")
+                return    
+            }
             if (user?.role !== "admin") {
                 navigate("/login")
                 return false
