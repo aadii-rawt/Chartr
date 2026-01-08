@@ -7,24 +7,24 @@ const AdminProtectiveRoute = ({ children }) => {
     const { user } = useUser()
     const navigate = useNavigate()
 
-    useEffect(() => {
-        function check() {
-            if(!user) {
-                navigate("/login")
-                return    
-            }
-            if (user?.role !== "admin") {
-                navigate("/login")
-                return false
-            }
-            setLoading(false)
-        }
-        check()
-    }, [user])
+    // useEffect(() => {
+    //     function check() {
+    //         if(!user) {
+    //             navigate("/login")
+    //             return    
+    //         }
+    //         if (user?.role !== "admin") {
+    //             navigate("/login")
+    //             return false
+    //         }
+    //         setLoading(false)
+    //     }
+    //     check()
+    // }, [user])
 
-    if (loading) {
-        return <div className='flex min-h-screen w-full items-center justify-center'>Loading...</div>
-    }
+    // if (loading) {
+    //     return <div className='flex min-h-screen w-full items-center justify-center'>Loading...</div>
+    // }
     return (
         children
     )
