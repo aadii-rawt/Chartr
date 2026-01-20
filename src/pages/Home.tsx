@@ -16,12 +16,15 @@ import { checkPlan } from "../middleware/middleware";
 import { doc, getDoc } from 'firebase/firestore';
 import { useUser } from '../context/UserContext';
 import { db } from '../../firebase';
+import RenewModal from '../components/RenewModal';
 
 
 const Home = () => {
 
   const { user, data, setData, isExpired, setIsExpired } = useUser()
-  
+
+  const [showRenew, setRenew] = useState(true)
+
   useEffect(() => {
     const fetchData = async () => {
       if (!user?.uid) return;
@@ -103,6 +106,8 @@ const Home = () => {
 
       <img src="./nearby.png" alt="" className='mt-5' />
 
+
+      {showRenew && <RenewModal setRenew={setRenew} />}
     </div>
   );
 };

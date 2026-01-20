@@ -1,15 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FaUserCircle } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import LocationSearch from '../components/LocationSearch'
 import TransportHomeCards from '../components/TransportHomeCards'
 import { IoMdBus } from 'react-icons/io'
 import { useUser } from '../context/UserContext'
+import RenewModal from '../components/RenewModal'
 
 const NewHome = () => {
-    
+    const [showRenew,setRenew] = useState(true)
     return (
-        <div className='min-h-screen  pb-20'>
+        <div className='min-h-screen relative pb-20'>
             <div className='bg-[url("/header-bg.png")] absolute top-0 left-0 -z-10 opacity-70 h-30 w-full bg-bottom bg-cover '>
 
             </div>
@@ -96,6 +97,9 @@ const NewHome = () => {
                 </div>
 
             </div>
+
+            {showRenew && <RenewModal  setRenew={setRenew}/>}
+
         </div>
     )
 }

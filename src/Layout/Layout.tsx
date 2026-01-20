@@ -20,7 +20,6 @@ const Layout = () => {
      {!isExpired && <Outlet /> }
 
 
-
       <FooterNav />
 
 
