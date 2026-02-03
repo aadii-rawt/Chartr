@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaUserCircle } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import LocationSearch from '../components/LocationSearch'
@@ -7,8 +7,42 @@ import { IoMdBus } from 'react-icons/io'
 import { useUser } from '../context/UserContext'
 import RenewModal from '../components/RenewModal'
 
+import { checkPlan } from "../middleware/middleware";
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../../firebase';
 const NewHome = () => {
-    const [showRenew,setRenew] = useState(true)
+
+    const { user, data, setData, isExpired, setIsExpired } = useUser()
+    
+      const [showRenew, setRenew] = useState(true)
+    
+      useEffect(() => {
+        const fetchData = async () => {
+          if (!user?.uid) return;
+    
+          try {
+            const docRef = doc(db, 'users', user.uid);
+            const snap = await getDoc(docRef);
+    
+            if (snap.exists()) {
+              setData({ id: snap.id, ...snap.data() });
+            }
+          } catch (e) {
+            console.error("Error fetching user data:", e);
+          }
+        };
+    
+        fetchData();
+      }, [user]);
+    
+      useEffect(() => {
+        if (!data) return;
+        const res = checkPlan(data?.plan, data)
+        if (!res.ok) {
+          setIsExpired(res)
+        }
+    
+      }, [data])
     return (
         <div className='min-h-screen relative pb-20'>
             <div className='bg-[url("/header-bg.png")] absolute top-0 left-0 -z-10 opacity-70 h-30 w-full bg-bottom bg-cover '>
@@ -98,7 +132,7 @@ const NewHome = () => {
 
             </div>
 
-            {showRenew && <RenewModal  setRenew={setRenew}/>}
+            {/* {showRenew && <RenewModal  setRenew={setRenew}/>} */}
 
         </div>
     )

@@ -24,6 +24,7 @@ import AdminProtectiveRoute from "./middleware/adminProtectiveRoute";
 import { useUser } from "./context/UserContext";
 import Home from "./pages/Home";
 import Download from "./pages/Download";
+import ReNewPlan from "./pages/ReNewPlan";
 
 const App = () => {
 
@@ -120,6 +121,14 @@ const App = () => {
       path: "/download",
       element: <Download />
     },
+    {
+      path: "/download",
+      element: <Download />
+    },
+    {
+      path : "/renew",
+      element : <ReNewPlan />
+    }
   ]))
   return (
     <RouterProvider router={router} />

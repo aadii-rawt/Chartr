@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const ExpiredUI = ({ expired }) => {
   return (
-    <div className="fixed top-40 left-1/2 -translate-x-1/2 w-full  max-w-md overflow-hidden rounded-lg bg-white text-left shadow-xl">
+    <div className="fixed top-40 left-1/2 -translate-x-1/2 w-full h-full  max-w-md overflow-hidden rounded-lg bg-white text-left shadow-xl">
       <div className="bg-white px-4 pt-5 pb-4">
         <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100">
           <HiOutlineExclamationTriangle className="h-6 w-6 text-red-600" aria-hidden="true" />
@@ -20,7 +20,7 @@ const ExpiredUI = ({ expired }) => {
       </div>
 
       <div className="m-3 bg-gray-50">
-        <Link to='/signup'
+        <Link to='/renew'
           className="inline-flex w-full cursor-pointer justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-base font-medium leading-6 text-white shadow-sm"
         >
           Renew Plan

@@ -107,7 +107,7 @@ const Home = () => {
       <img src="./nearby.png" alt="" className='mt-5' />
 
 
-      {showRenew && <RenewModal setRenew={setRenew} />}
+      {/* {showRenew && <RenewModal setRenew={setRenew} />} */}
     </div>
   );
 };

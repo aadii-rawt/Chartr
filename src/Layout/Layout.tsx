@@ -18,12 +18,7 @@ const Layout = () => {
   return (
     <div className='max-w-md mx-auto relative'>
      {!isExpired && <Outlet /> }
-
-
       <FooterNav />
-
-
-
       {isExpired && <ExpiredUI expired={isExpired} data={data} />}
     </div>
   )
