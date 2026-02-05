@@ -5,7 +5,8 @@ import { BsQrCode } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import { doc, getDoc, Timestamp } from 'firebase/firestore';
 import { db } from '../../firebase';
-
+import { checkPlan } from "../middleware/middleware";
+import ExpiredUI from '../components/ExpiredUI';
 // --- helpers ---
 const toJsDate = (value: any): Date | null => {
     if (!value) return null;
@@ -93,6 +94,40 @@ const DailyPass = () => {
     // Time strings
     const bookingTimeStr = createdAtDate ? formatTime(validFrom) : '07:06 AM';
     const validityTimeStr = createdAtDate ? formatTime(validTill) : '11:59 PM';
+
+      const { data, setData, isExpired, setIsExpired } = useUser()
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!user?.uid) return;
+
+      try {
+        const docRef = doc(db, 'users', user.uid);
+        const snap = await getDoc(docRef);
+
+        if (snap.exists()) {
+          setData({ id: snap.id, ...snap.data() });
+        }
+      } catch (e) {
+        console.error("Error fetching user data:", e);
+      }
+    };
+
+    fetchData();
+  }, [user]);
+
+  useEffect(() => {
+    console.log(data);
+
+    if (!data) return;
+    const res = checkPlan(data?.plan, data)
+    if (!res.ok) {
+      setIsExpired(res)
+    }
+
+  }, [data])
+
+  if(isExpired) return <ExpiredUI expired={isExpired} data={data}/>
 
     return (
         <div className="min-h-screen max-w-md mx-auto bg-[#d83737] flex items-center justify-center p-4 relative">

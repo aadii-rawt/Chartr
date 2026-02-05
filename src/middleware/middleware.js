@@ -38,7 +38,8 @@ function atLocalMidnight(d) {
 
 export const checkPlan = (plan, user) => {
   const todayLocal = atLocalMidnight(new Date());
-  const expireRaw = tsToDate(user?.expireAt);           // converts {seconds,nanoseconds} -> Date
+  const expireRaw = tsToDate(user?.expireAt);  
+  
   const expireLocal = expireRaw ? atLocalMidnight(expireRaw) : null;
 
   switch (plan) {

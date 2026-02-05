@@ -45,6 +45,8 @@ const Home = () => {
   }, [user]);
 
   useEffect(() => {
+    console.log(data);
+    
     if (!data) return;
     const res = checkPlan(data?.plan, data)
     if (!res.ok) {

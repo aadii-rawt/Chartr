@@ -7,7 +7,8 @@ import { Link } from 'react-router-dom';
 import { doc, getDoc, Timestamp } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { useUser } from '../context/UserContext';
-
+import { checkPlan } from "../middleware/middleware";
+import ExpiredUI from '../components/ExpiredUI';
 // --- helpers ---
 const toJsDate = (value: any): Date | null => {
   if (!value) return null;
@@ -119,6 +120,40 @@ const MonthlyPass: React.FC = () => {
   const passId = generatePassId()
   const fare = latestPass?.fare ?? 1000;
 
+  const { data, setData, isExpired, setIsExpired } = useUser()
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!user?.uid) return;
+
+      try {
+        const docRef = doc(db, 'users', user.uid);
+        const snap = await getDoc(docRef);
+
+        if (snap.exists()) {
+          setData({ id: snap.id, ...snap.data() });
+        }
+      } catch (e) {
+        console.error("Error fetching user data:", e);
+      }
+    };
+
+    fetchData();
+  }, [user]);
+
+  useEffect(() => {
+    console.log(data);
+
+    if (!data) return;
+    const res = checkPlan(data?.plan, data)
+    if (!res.ok) {
+      setIsExpired(res)
+    }
+
+  }, [data])
+
+  if(isExpired) return <ExpiredUI expired={isExpired} data={data}/>
+
   return (
     <div className="bg-[#3564AC] min-h-screen relative p-4 text-black max-w-md mx-auto">
       {/* Header */}
@@ -142,8 +177,8 @@ const MonthlyPass: React.FC = () => {
               passengerImage
                 ? passengerImage
                 : user?.username === 'demo'
-                ? '/demo.jpg'
-                : '/fake.jpeg'
+                  ? '/demo.jpg'
+                  : '/fake.jpeg'
             }
             alt="Passenger"
             className="w-22 h-24 rounded-md object-cover"
