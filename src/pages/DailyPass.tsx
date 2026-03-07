@@ -95,39 +95,39 @@ const DailyPass = () => {
     const bookingTimeStr = createdAtDate ? formatTime(validFrom) : '07:06 AM';
     const validityTimeStr = createdAtDate ? formatTime(validTill) : '11:59 PM';
 
-      const { data, setData, isExpired, setIsExpired } = useUser()
+    const { data, setData, isExpired, setIsExpired } = useUser()
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!user?.uid) return;
+    useEffect(() => {
+        const fetchData = async () => {
+            if (!user?.uid) return;
 
-      try {
-        const docRef = doc(db, 'users', user.uid);
-        const snap = await getDoc(docRef);
+            try {
+                const docRef = doc(db, 'users', user.uid);
+                const snap = await getDoc(docRef);
 
-        if (snap.exists()) {
-          setData({ id: snap.id, ...snap.data() });
+                if (snap.exists()) {
+                    setData({ id: snap.id, ...snap.data() });
+                }
+            } catch (e) {
+                console.error("Error fetching user data:", e);
+            }
+        };
+
+        fetchData();
+    }, [user]);
+
+    useEffect(() => {
+        console.log(data);
+
+        if (!data) return;
+        const res = checkPlan(data?.plan, data)
+        if (!res.ok) {
+            setIsExpired(res)
         }
-      } catch (e) {
-        console.error("Error fetching user data:", e);
-      }
-    };
 
-    fetchData();
-  }, [user]);
+    }, [data])
 
-  useEffect(() => {
-    console.log(data);
-
-    if (!data) return;
-    const res = checkPlan(data?.plan, data)
-    if (!res.ok) {
-      setIsExpired(res)
-    }
-
-  }, [data])
-
-  if(isExpired) return <ExpiredUI expired={isExpired} data={data}/>
+    if (isExpired) return <ExpiredUI expired={isExpired} data={data} />
 
     return (
         <div className="min-h-screen max-w-md mx-auto bg-[#d83737] flex items-center justify-center p-4 relative">
@@ -179,13 +179,13 @@ const DailyPass = () => {
 
                         <div className="pt-1">
                             <div className="text-sm">Booking Time</div>
-                            <div className="text-lg">{formatDate(validFrom, bookingTimeStr)} 
-                                 </div>
+                            <div className="text-lg">{formatDate(validFrom, bookingTimeStr)}
+                            </div>
                         </div>
 
                         <div className="pt-1">
                             <div className="text-sm">Validity Time</div>
-                            <div className="text-lg">{user?.username == 'demo'  && 'Invalid time for demo user'}</div>
+                            <div className="text-lg">{user?.username == 'demo' && 'Invalid time for demo user'}</div>
                             <div className="text-lg">{formatDate(validTill, validityTimeStr)}</div>
                         </div>
 
@@ -226,6 +226,7 @@ const DailyPass = () => {
                     </div>
                 )}
             </div>
+            {user?.username === 'demo' && <h1 className='text-5xl fixed -rotate-45 top-[50%]  font-semibold text-red-500/50 left-5'>DEMO PASS</h1>}
         </div>
     );
 };

@@ -84,10 +84,7 @@ const Home = () => {
           <FeatureButton icon={<MdAltRoute size={24} />} label="Route Info" />
           <FeatureButton icon={<BsStack size={24} />} label="See All" />
         </div>
-
       </div>
-
-
 
       {/* Banner */}
       <div className="rounded-lg overflow-hidden">

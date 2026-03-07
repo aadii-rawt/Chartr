@@ -25,10 +25,14 @@ const ReNewPlan = () => {
   }, []);
 
   // Helper: today + 1 month
-  const getExpiryDatePlusOneMonth = () => {
+  const getExpiryDatePlusOneMonth = (planName) => {
     const now = new Date();
     const expiry = new Date(now);
-    expiry.setMonth(expiry.getMonth() + 1);
+    if(planName == "premium") {
+      expiry.setMonth(expiry.getMonth() + 2); // 2 month for premium users
+    }else {
+      expiry.setMonth(expiry.getMonth() + 1); 
+    }
     return expiry;
   };
 
@@ -59,7 +63,7 @@ const ReNewPlan = () => {
         handler: async function (response: any) {
           try {
             const startedAt = new Date();
-            const expiresAt = getExpiryDatePlusOneMonth();
+            const expiresAt = getExpiryDatePlusOneMonth(plan?.name);
 
             const userRef = doc(db, "users", user.uid);
 
