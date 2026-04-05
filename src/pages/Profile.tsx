@@ -13,6 +13,8 @@ const Profile = () => {
   const { user, setUser, newHomePage, setNewHomePage } = useUser();
   const navigate = useNavigate();
 
+  console.log(user);
+  
   const handleLogout = async () => {
     try {
       if (user?.uid) {

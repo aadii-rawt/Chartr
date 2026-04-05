@@ -90,15 +90,14 @@ const Login = () => {
           onChange={(e) => setEmail(e.target.value)}
           className="w-full border border-gray-300 rounded p-2"
         />
-        <div className='w-full flex border border-gray-300 rounded px-2 gap-3'>
-
+        <div className='w-full flex border border-gray-300 rounded px-2 gap-3 focus-within:border-blue-600 border-1.5'>
           <input
             type={showPassword ? "text" : "password"}
             placeholder="Password"
             value={password}
             required
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full py-2"
+            className="w-full py-2 outline-none border-none"
           />
           <button type='button' onClick={() => setShowPassword(!showPassword)}>{showPassword ?  <LuEyeOff /> : <LuEye />}</button>
         </div>

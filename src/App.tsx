@@ -25,6 +25,9 @@ import { useUser } from "./context/UserContext";
 import Home from "./pages/Home";
 import Download from "./pages/Download";
 import ReNewPlan from "./pages/ReNewPlan";
+import ReferPage from "./pages/ReferPage";
+import SignupwithRefer from "./pages/SignupwithRefer";
+import SelectPlan from "./pages/SelectPlan";
 
 const App = () => {
 
@@ -110,12 +113,24 @@ const App = () => {
       element: <MonthlyPass />
     },
     {
+      path: "/refer",
+      element: <ReferPage />
+    },
+    {
       path: "/login",
       element: <Login />
     },
     {
       path: "/signup",
       element: <Signup />
+    },
+    {
+      path: "/signup&refer",
+      element: <SignupwithRefer />
+    },
+    {
+      path: "/select-plan",
+      element: <SelectPlan />
     },
     {
       path: "/download",

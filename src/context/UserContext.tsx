@@ -8,6 +8,7 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [data, setData] = useState(null);
   const [isExpired, setIsExpired] = useState(false)
+  const [showRefer,setShowRefer] = useState(false)
   const [newHomePage,setNewHomePage] = useState(localStorage.getItem('newHomePage') ? JSON.parse(localStorage.getItem('newHomePage')) : true)
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -21,8 +22,17 @@ export const UserProvider = ({ children }) => {
     }
   }, []);
 
+  useEffect(() => {
+   const id =  setTimeout(() => {
+      setShowRefer(true)
+    }, 1000)
+
+
+    return () => clearTimeout(id)
+  },[])
+
   return (
-    <UserContext.Provider value={{ user, setUser, data, setData ,isExpired, setIsExpired,newHomePage,setNewHomePage}}>
+    <UserContext.Provider value={{ user, setUser, data, setData , showRefer,setShowRefer, isExpired, setIsExpired,newHomePage,setNewHomePage}}>
       {children}
     </UserContext.Provider>
   );

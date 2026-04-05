@@ -10,39 +10,43 @@ import RenewModal from '../components/RenewModal'
 import { checkPlan } from "../middleware/middleware";
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
+import Refer from '../components/Refer'
 const NewHome = () => {
 
-    const { user, data, setData, isExpired, setIsExpired } = useUser()
+    const { user, data, setData, isExpired, setIsExpired, showRefer, setShowRefer } = useUser()
+
+    const [showRenew, setRenew] = useState(true)
+
     
-      const [showRenew, setRenew] = useState(true)
-    
-      useEffect(() => {
+    useEffect(() => {
         const fetchData = async () => {
-          if (!user?.uid) return;
-    
-          try {
-            const docRef = doc(db, 'users', user.uid);
-            const snap = await getDoc(docRef);
-    
-            if (snap.exists()) {
-              setData({ id: snap.id, ...snap.data() });
+            if (!user?.uid) return;
+
+            try {
+                const docRef = doc(db, 'users', user.uid);
+                const snap = await getDoc(docRef);
+
+                if (snap.exists()) {
+                    setData({ id: snap.id, ...snap.data() });
+                }
+            } catch (e) {
+                console.error("Error fetching user data:", e);
             }
-          } catch (e) {
-            console.error("Error fetching user data:", e);
-          }
         };
-    
+
         fetchData();
-      }, [user]);
-    
-      useEffect(() => {
+    }, [user]);
+
+    useEffect(() => {
         if (!data) return;
         const res = checkPlan(data?.plan, data)
         if (!res.ok) {
-          setIsExpired(res)
+            setIsExpired(res)
         }
-    
-      }, [data])
+
+    }, [data])
+
+
     return (
         <div className='min-h-screen relative pb-20'>
             <div className='bg-[url("/header-bg.png")] absolute top-0 left-0 -z-10 opacity-70 h-30 w-full bg-bottom bg-cover '>
@@ -133,6 +137,7 @@ const NewHome = () => {
             </div>
 
             {/* {showRenew && <RenewModal  setRenew={setRenew}/>} */}
+            {showRefer && <Refer />}
 
         </div>
     )

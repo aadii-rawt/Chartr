@@ -269,7 +269,7 @@ const MonthlyPass: React.FC = () => {
         </div>
       )}
 
-      {user?.username === 'demo' &&  <h1 className='text-5xl fixed -rotate-45 top-[50%]  font-semibold text-red-500/50 left-5'>DEMO PASS</h1>
+      {user?.username === 'demo' &&  <h1 className='text-5xl max-w-md mx-auto fixed -rotate-45 top-[50%]  font-semibold text-red-500/50 left-5'>DEMO PASS</h1>
 }
     </div>
   );
