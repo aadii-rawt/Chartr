@@ -2,7 +2,7 @@ import React from "react";
 import { useUser } from "../context/UserContext";
 
 
-const APP_URL = "http://localhost:5174/signup&refer";
+const APP_URL = "https://chartr-apk.netlify.app/signup&refer";
 
 const ReferPage: React.FC = () => {
     const {user} = useUser()
