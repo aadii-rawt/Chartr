@@ -111,8 +111,12 @@ const Login = () => {
         </button>
       </form>
 
-      <Link to="/signup" className="text-blue-500 underline">
+
+      <Link to="/signup&refer" className="text-blue-500 underline">
         Create your account
+      </Link>
+      <Link to="/signup" className="text-blue-500 underline">
+     Plans
       </Link>
     </div>
   );

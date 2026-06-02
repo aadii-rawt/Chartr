@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { plans } from "../config/plans";
-import { collection, doc, getDoc, getDocs, increment, query, setDoc, Timestamp, updateDoc, where } from "firebase/firestore";
+import { arrayUnion, collection, doc, getDoc, getDocs, increment, query, setDoc, Timestamp, updateDoc, where } from "firebase/firestore";
 import { db } from "../../firebase";
 
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -16,13 +16,14 @@ declare global {
     }
 }
 
-const DISCOUNT = 150;
 
 const SelectPlan = () => {
     const keyId = import.meta.env.VITE_RAZORPAY_KEY_ID as string;
     const { setUser } = useUser()
     const signupData = JSON.parse(localStorage.getItem("signupData") || "{}");
     const navigate = useNavigate()
+    const DISCOUNT = signupData.referral ? 150 : 0;
+
 
     // Load Razorpay
     useEffect(() => {
@@ -56,6 +57,15 @@ const SelectPlan = () => {
             }
 
             const finalPrice = Math.max(plan.price - DISCOUNT, 1);
+            const startedAt = new Date();
+            const transactionData = {
+                username: signupData.name + " " + signupData.phone,
+                amount: finalPrice,
+                date: Timestamp.fromDate(startedAt),
+                plan: plan.name,
+                status: ""
+            }
+
 
             const options = {
                 key: keyId,
@@ -91,7 +101,7 @@ const SelectPlan = () => {
                             username: signupData.name,
                             email: signupData.email,
                             phone: signupData.phone,
-                            password:  signupData.password,
+                            password: signupData.password,
                             referral: signupData.referral || null,
 
                             plan: plan.name,
@@ -127,11 +137,24 @@ const SelectPlan = () => {
                             } catch (err) {
                                 console.log("Referral update failed", err);
                             }
-                        }else {
+                        } else {
                             console.log("no refer");
-                            
+
                         }
 
+                        const userPassDocRef = doc(db, 'transactions', "history");
+                        const docSnap = await getDoc(userPassDocRef);
+
+                        const finalData = { ...transactionData, status: "success" }
+                        if (docSnap.exists()) {
+                            await updateDoc(userPassDocRef, {
+                                passes: arrayUnion(finalData),
+                            });
+                        } else {
+                            await setDoc(userPassDocRef, {
+                                passes: [finalData],
+                            });
+                        }
 
                         // 🔥 5. SAVE USER IN LOCAL STORAGE
                         localStorage.setItem("user", JSON.stringify(userData));
@@ -165,7 +188,25 @@ const SelectPlan = () => {
 
             const rzp = new window.Razorpay(options);
 
-            rzp.on("payment.failed", function () {
+            
+            rzp.on("payment.failed", async function () {
+
+
+                 const userPassDocRef = doc(db, 'transactions', "history");
+                        const docSnap = await getDoc(userPassDocRef);
+
+                        const finalData = { ...transactionData, status: "faiiled" }
+                        if (docSnap.exists()) {
+                            await updateDoc(userPassDocRef, {
+                                passes: arrayUnion(finalData),
+                            });
+                        } else {
+                            await setDoc(userPassDocRef, {
+                                passes: [finalData],
+                            });
+                        }
+
+
                 alert("❌ Payment failed. Please try again.");
             });
 

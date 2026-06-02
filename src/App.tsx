@@ -28,6 +28,7 @@ import ReNewPlan from "./pages/ReNewPlan";
 import ReferPage from "./pages/ReferPage";
 import SignupwithRefer from "./pages/SignupwithRefer";
 import SelectPlan from "./pages/SelectPlan";
+import Transaction from "./pages/Admin/Transaction";
 
 const App = () => {
 
@@ -61,6 +62,10 @@ const App = () => {
       children: [{
         path: "/admin",
         element: <Dashboard />
+      },
+      {
+        path: "/transactions",
+        element: <Transaction />
       },
       {
         path: "/pass",

@@ -6,7 +6,7 @@ import { IoCalendarOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { LuCrown, LuUsers } from "react-icons/lu";
 import { FaHome } from "react-icons/fa";
-
+import { GrTransaction } from "react-icons/gr";
 export default function Sidebar() {
   const [open, setOpen] = useState(false);
 
@@ -15,6 +15,7 @@ export default function Sidebar() {
       section: "Main",
       links: [
         { href: "/admin", label: "Dashboard", icon: <CiGrid42  /> },
+        { href: "/transactions", label: "Transaction", icon: <GrTransaction  /> },
         { href: "/dailypassAdmin", label: "Daily Pass", icon: <BsPass  /> },
         { href: "/pass", label: "Pass", icon: <IoCalendarOutline   /> },
         { href: "/plans", label: "Plans", icon: <LuCrown  /> },

@@ -35,6 +35,7 @@ const Signup = () => {
 
     return (
         <div className="max-w-sm mx-auto min-h-screen p-4 bg-white rounded shadow space-y-4 flex items-center justify-center flex-col">
+         
             <div className="card">
                 <div className="pricing-block-content">
                     <p className="pricing-plan">Basic</p>
@@ -131,7 +132,6 @@ const Signup = () => {
                     </ul>
                 </div>
             </div>
-
             <form onSubmit={onSubmit} className="w-full mt-4 space-y-3">
                 <div>
                     <label className="block text-sm mb-1">Your Name</label>
@@ -184,7 +184,6 @@ const Signup = () => {
                     </span>
                 </button>
             </form>
-
         </div>
     )
 }

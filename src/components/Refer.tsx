@@ -13,7 +13,7 @@ const Refer = () => {
        <RxCross1 className="absolute text-lg right-8 top-5 cursor-pointer" onClick={() => setShowRefer(false)}/>
         <div onClick={() => navigate("/refer")}>
 
-        <img src="./refer.png" alt="" className='w-full px-5' />
+        <img src="./refer.png" alt="" className='w-full px-5 lg:w-1/2' />
         </div>
       </div> 
     </div>

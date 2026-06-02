@@ -73,7 +73,6 @@ const BusPassForm: React.FC = () => {
       };
       const userPassDocRef = doc(db, 'passes', user.uid);
       const docSnap = await getDoc(userPassDocRef);
-
       if (docSnap.exists()) {
         await updateDoc(userPassDocRef, {
           passes: arrayUnion(passData),

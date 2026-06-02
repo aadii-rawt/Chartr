@@ -7,6 +7,8 @@ import {
   Timestamp,
   getDoc,
   increment,
+  arrayUnion,
+  setDoc,
 } from "firebase/firestore";
 import { db } from "../../firebase";
 
@@ -45,7 +47,6 @@ const ReNewPlan = () => {
       }
       setLoading(false);
     };
-
     fetchUser();
   }, [user]);
 
@@ -84,10 +85,18 @@ const ReNewPlan = () => {
       }
 
       const userData = snap.data();
-      const hasReferral = (userData.referredDevices || 0) > 0;
+      const hasReferral: any = (userData.referredDevices || 0) > 0;
 
-      const discount = hasReferral ? 150 : 0;
+      const discount = hasReferral ? hasReferral * 150 : 0;
       const finalPrice = Math.max(plan.price - discount, 1);
+      const startedAt = new Date();
+      const transactionData = {
+        username: user.username,
+        amount: finalPrice,
+        date: Timestamp.fromDate(startedAt),
+        plan: plan.name,
+        status: ""
+      }
 
       const options = {
         key: keyId,
@@ -105,7 +114,7 @@ const ReNewPlan = () => {
 
         handler: async function () {
           try {
-            const startedAt = new Date();
+
             const expiresAt = getExpiryDatePlusOneMonth(plan.name);
 
             const updateData: any = {
@@ -114,12 +123,26 @@ const ReNewPlan = () => {
               expireAt: Timestamp.fromDate(expiresAt),
             };
 
-            // 🔥 Deduct referral if used
             if (hasReferral) {
               updateData.referredDevices = increment(-1);
             }
 
             await updateDoc(userRef, updateData);
+
+            // transaction history
+            const userPassDocRef = doc(db, 'transactions', "history");
+            const docSnap = await getDoc(userPassDocRef);
+
+            const finalData = { ...transactionData, status: "success" }
+            if (docSnap.exists()) {
+              await updateDoc(userPassDocRef, {
+                passes: arrayUnion(finalData),
+              });
+            } else {
+              await setDoc(userPassDocRef, {
+                passes: [finalData],
+              });
+            }
 
             alert(
               hasReferral
@@ -141,7 +164,21 @@ const ReNewPlan = () => {
 
       const rzp = new window.Razorpay(options);
 
-      rzp.on("payment.failed", function () {
+      rzp.on("payment.failed", async function () {
+        // transaction history
+        const userPassDocRef = doc(db, 'transactions', "history");
+        const docSnap = await getDoc(userPassDocRef);
+
+        const finalData = { ...transactionData, status: "failed" }
+        if (docSnap.exists()) {
+          await updateDoc(userPassDocRef, {
+            passes: arrayUnion(finalData),
+          });
+        } else {
+          await setDoc(userPassDocRef, {
+            passes: [finalData],
+          });
+        }
         alert("❌ Payment failed. Please try again.");
       });
 
@@ -163,7 +200,7 @@ const ReNewPlan = () => {
         return (
           <div key={p.name} className="card">
             <div className="pricing-block-content">
-              
+
               <p className="pricing-plan capitalize">{p.name}</p>
 
               <div className="price-value">
