@@ -12,6 +12,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../firebase";
 import axios from "axios";
+import Razorpay from "razorpay";
 
 declare global {
   interface Window {
@@ -145,34 +146,61 @@ const ReNewPlan = () => {
               });
             }
 
-            try {
-              const response = await axios.post(
-                "https://api.razorpay.com/v1/subscriptions",
-                {
-                  plan_id: "plan_TdVCIOA3BhaueC",
-                  total_count: 12,
-                  quantity: 1,
-                  customer_notify: 1,
-                  start_at: Math.floor(startedAt.getTime() / 1000),
-                },
-                {
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  auth: {
-                    username: import.meta.env.VITE_RAZORPAY_KEY_ID as string,
-                    password: import.meta.env.VITE_RAZORPAY_SECRET as string,
-                  },
-                }
-              );
 
-              console.log(response.data);
+            const razorpay = new Razorpay({
+              key_id: import.meta.env.VITE_RAZORPAY_KEY_ID,
+              key_secret: import.meta.env.VITE_RAZORPAY_SECRET,
+            });
+
+            try {
+              const subscription = await razorpay.subscriptions.create({
+                plan_id: "plan_TdVCIOA3BhaueC",
+                total_count: 12,
+                quantity: 1,
+                customer_notify: 1,
+              });
+
+              return {
+                subscriptionId: subscription.id,
+                status: subscription.status,
+              };
             } catch (error) {
-              console.error(
-                "Razorpay Error:",
-                error.response?.data || error.message
-              );
+              console.error("Razorpay subscription error:", error);
+
+              // throw new HttpsError(
+              //   "internal",
+              //   "Unable to create subscription."
+              // );
             }
+
+            // try {
+            //   const response = await axios.post(
+            //     "https://api.razorpay.com/v1/subscriptions",
+            //     {
+            //       plan_id: "plan_TdVCIOA3BhaueC",
+            //       total_count: 12,
+            //       quantity: 1,
+            //       customer_notify: 1,
+            //       start_at: Math.floor(startedAt.getTime() / 1000),
+            //     },
+            //     {
+            //       headers: {
+            //         "Content-Type": "application/json",
+            //       },
+            //       auth: {
+            //         username: import.meta.env.VITE_RAZORPAY_KEY_ID as string,
+            //         password: import.meta.env.VITE_RAZORPAY_SECRET as string,
+            //       },
+            //     }
+            //   );
+
+            //   console.log(response.data);
+            // } catch (error) {
+            //   console.error(
+            //     "Razorpay Error:",
+            //     error.response?.data || error.message
+            //   );
+            // }
             alert(
               hasReferral
                 ? "✅ Plan activated with ₹150 discount!"
@@ -193,23 +221,6 @@ const ReNewPlan = () => {
 
       const rzp = new window.Razorpay(options);
 
-
-      // rzp.subscriptions.create({
-      //   plan_id: "plan_TdVCIOA3BhaueC",
-      //   customer_notify: true,
-      //   quantity: 1,
-      //   total_count: 12,
-      //   start_at: Math.floor(startedAt.getTime() / 1000),
-      //   addons: [
-      //     {
-      //       item: {
-      //         name: "Charter Subscription",
-      //         amount: Math.round(plan.price * 100),
-      //         currency: "INR"
-      //       }
-      //     }
-      //   ],
-      // })
 
       rzp.on("payment.failed", async function () {
 
