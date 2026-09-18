@@ -1,7 +1,7 @@
 export const plans = [
     {
         name : "basic",
-        price : 100,
+        price : 1,
         features : [
             {
                 title : "4 Free Daily Pass",

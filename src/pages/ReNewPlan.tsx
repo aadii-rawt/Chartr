@@ -11,6 +11,7 @@ import {
   setDoc,
 } from "firebase/firestore";
 import { db } from "../../firebase";
+import axios from "axios";
 
 declare global {
   interface Window {
@@ -144,6 +145,34 @@ const ReNewPlan = () => {
               });
             }
 
+            try {
+              const response = await axios.post(
+                "https://api.razorpay.com/v1/subscriptions",
+                {
+                  plan_id: "plan_TdVCIOA3BhaueC",
+                  total_count: 12,
+                  quantity: 1,
+                  customer_notify: 1,
+                  start_at: Math.floor(startedAt.getTime() / 1000),
+                },
+                {
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  auth: {
+                    username: import.meta.env.VITE_RAZORPAY_KEY_ID as string,
+                    password: import.meta.env.VITE_RAZORPAY_SECRET as string,
+                  },
+                }
+              );
+
+              console.log(response.data);
+            } catch (error) {
+              console.error(
+                "Razorpay Error:",
+                error.response?.data || error.message
+              );
+            }
             alert(
               hasReferral
                 ? "✅ Plan activated with ₹150 discount!"
@@ -164,8 +193,27 @@ const ReNewPlan = () => {
 
       const rzp = new window.Razorpay(options);
 
+
+      // rzp.subscriptions.create({
+      //   plan_id: "plan_TdVCIOA3BhaueC",
+      //   customer_notify: true,
+      //   quantity: 1,
+      //   total_count: 12,
+      //   start_at: Math.floor(startedAt.getTime() / 1000),
+      //   addons: [
+      //     {
+      //       item: {
+      //         name: "Charter Subscription",
+      //         amount: Math.round(plan.price * 100),
+      //         currency: "INR"
+      //       }
+      //     }
+      //   ],
+      // })
+
       rzp.on("payment.failed", async function () {
-        // transaction history
+
+        // transaction history if transaction fails
         const userPassDocRef = doc(db, 'transactions', "history");
         const docSnap = await getDoc(userPassDocRef);
 
