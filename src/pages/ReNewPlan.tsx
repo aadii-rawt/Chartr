@@ -145,62 +145,7 @@ const ReNewPlan = () => {
                 passes: [finalData],
               });
             }
-
-
-            const razorpay = new Razorpay({
-              key_id: import.meta.env.VITE_RAZORPAY_KEY_ID,
-              key_secret: import.meta.env.VITE_RAZORPAY_SECRET,
-            });
-
-            try {
-              const subscription = await razorpay.subscriptions.create({
-                plan_id: "plan_TdVCIOA3BhaueC",
-                total_count: 12,
-                quantity: 1,
-                customer_notify: 1,
-              });
-
-              return {
-                subscriptionId: subscription.id,
-                status: subscription.status,
-              };
-            } catch (error) {
-              console.error("Razorpay subscription error:", error);
-
-              // throw new HttpsError(
-              //   "internal",
-              //   "Unable to create subscription."
-              // );
-            }
-
-            // try {
-            //   const response = await axios.post(
-            //     "https://api.razorpay.com/v1/subscriptions",
-            //     {
-            //       plan_id: "plan_TdVCIOA3BhaueC",
-            //       total_count: 12,
-            //       quantity: 1,
-            //       customer_notify: 1,
-            //       start_at: Math.floor(startedAt.getTime() / 1000),
-            //     },
-            //     {
-            //       headers: {
-            //         "Content-Type": "application/json",
-            //       },
-            //       auth: {
-            //         username: import.meta.env.VITE_RAZORPAY_KEY_ID as string,
-            //         password: import.meta.env.VITE_RAZORPAY_SECRET as string,
-            //       },
-            //     }
-            //   );
-
-            //   console.log(response.data);
-            // } catch (error) {
-            //   console.error(
-            //     "Razorpay Error:",
-            //     error.response?.data || error.message
-            //   );
-            // }
+            
             alert(
               hasReferral
                 ? "✅ Plan activated with ₹150 discount!"
