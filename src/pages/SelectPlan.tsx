@@ -7,6 +7,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase.js";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext.js";
+import api from "../api/axios.js";
 
 
 
@@ -66,10 +67,27 @@ const SelectPlan = () => {
                 status: ""
             }
 
+            let subscriptionId;
+            try {
+                const data = await api.post("/subscription/create", {
+                    // planId: "plan_TfxopItQSqKgWJ"
+                    planId: plan.id
+                })
+                subscriptionId = data.data?.data.id;
+            } catch (error) {
+                console.error("Error creating subscription:", error);
+            }
+
+            if (!subscriptionId) {
+                alert("Failed to create subscription. Please try again.");
+                return;
+            }
+
 
             const options = {
                 key: keyId,
-                amount: Math.round(finalPrice * 100),
+                // amount: Math.round(finalPrice * 100),
+                subscription_id: subscriptionId,
                 currency: "INR",
                 name: "Chartr",
                 description: `${plan.name} Plan`,
@@ -188,23 +206,23 @@ const SelectPlan = () => {
 
             const rzp = new window.Razorpay(options);
 
-            
+
             rzp.on("payment.failed", async function () {
 
 
-                 const userPassDocRef = doc(db, 'transactions', "history");
-                        const docSnap = await getDoc(userPassDocRef);
+                const userPassDocRef = doc(db, 'transactions', "history");
+                const docSnap = await getDoc(userPassDocRef);
 
-                        const finalData = { ...transactionData, status: "faiiled" }
-                        if (docSnap.exists()) {
-                            await updateDoc(userPassDocRef, {
-                                passes: arrayUnion(finalData),
-                            });
-                        } else {
-                            await setDoc(userPassDocRef, {
-                                passes: [finalData],
-                            });
-                        }
+                const finalData = { ...transactionData, status: "faiiled" }
+                if (docSnap.exists()) {
+                    await updateDoc(userPassDocRef, {
+                        passes: arrayUnion(finalData),
+                    });
+                } else {
+                    await setDoc(userPassDocRef, {
+                        passes: [finalData],
+                    });
+                }
 
 
                 alert("❌ Payment failed. Please try again.");

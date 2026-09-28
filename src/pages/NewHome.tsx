@@ -17,7 +17,15 @@ const NewHome = () => {
 
     const [showRenew, setRenew] = useState(true)
 
-    
+
+    console.log(user)
+    const date = new Date(
+        user?.expireAt.seconds * 1000 +
+        user?.expireAt.nanoseconds / 1_000_000
+    );
+
+    console.log(date);
+    console.log(date.toLocaleString("en-IN"));
     useEffect(() => {
         const fetchData = async () => {
             if (!user?.uid) return;

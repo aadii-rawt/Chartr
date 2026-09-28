@@ -12,7 +12,11 @@ import {
 } from "firebase/firestore";
 import { db } from "../../firebase";
 import axios from "axios";
-import Razorpay from "razorpay";
+import { useNavigate } from "react-router-dom";
+import getReferal from "../utils/getReferal";
+import { getDiscountPirce } from "../utils/utils";
+import subscriptionExpireAt from "../utils/getExpireDate";
+import api from "../api/axios";
 
 declare global {
   interface Window {
@@ -22,9 +26,10 @@ declare global {
 
 const ReNewPlan = () => {
   const { user } = useUser();
+  const navigate = useNavigate()
   const keyId = import.meta.env.VITE_RAZORPAY_KEY_ID as string;
 
-  const [referralAvailable, setReferralAvailable] = useState(false);
+  const [referralAvailable, setReferralAvailable] = useState(0);
   const [loading, setLoading] = useState(true);
 
   // Load Razorpay
@@ -37,36 +42,14 @@ const ReNewPlan = () => {
     }
   }, []);
 
-  // 🔥 Fetch referral devices
+  // ------ get user refferal count -------------
   useEffect(() => {
-    const fetchUser = async () => {
-      if (!user?.uid) return;
-
-      const snap = await getDoc(doc(db, "users", user.uid));
-      if (snap.exists()) {
-        const data = snap.data();
-        setReferralAvailable((data.referredDevices || 0) > 0);
-      }
-      setLoading(false);
-    };
-    fetchUser();
+    getReferal(user, setReferralAvailable, setLoading);
   }, [user]);
 
-  // Expiry logic
-  const getExpiryDatePlusOneMonth = (planName: string) => {
-    const now = new Date();
-    const expiry = new Date(now);
 
-    if (planName === "premium") {
-      expiry.setMonth(expiry.getMonth() + 2);
-    } else {
-      expiry.setMonth(expiry.getMonth() + 1);
-    }
 
-    return expiry;
-  };
-
-  const openRazorpay = async (plan: any) => {
+  const handlePayment = async (plan: any) => {
     try {
       if (!window.Razorpay) {
         alert("Payment gateway not loaded yet");
@@ -89,8 +72,9 @@ const ReNewPlan = () => {
       const userData = snap.data();
       const hasReferral: any = (userData.referredDevices || 0) > 0;
 
-      const discount = hasReferral ? hasReferral * 150 : 0;
-      const finalPrice = Math.max(plan.price - discount, 1);
+      // const discount = hasReferral ? hasReferral * 150 : 0;
+      // const finalPrice = Math.max(plan.price - discount, 1);
+      const finalPrice = getDiscountPirce(plan.price, referralAvailable);
       const startedAt = new Date();
       const transactionData = {
         username: user.username,
@@ -100,24 +84,45 @@ const ReNewPlan = () => {
         status: ""
       }
 
+      // ----- create razorpay subscription for autopay
+      // plan_TfvT1ZnurIb1rQ
+      let subscriptionId;
+      try {
+        const data = await api.post("/subscription/create", {
+          // planId: "plan_TfxopItQSqKgWJ"
+          planId: plan.id
+        })
+        subscriptionId = data.data?.data.id;
+      } catch (error) {
+        console.error("Error creating subscription:", error);
+      }
+
+      if (!subscriptionId) {
+        alert("Failed to create subscription. Please try again.");
+        return;
+      }
+
+
+      // open razorpay checkout
       const options = {
         key: keyId,
-        amount: Math.round(finalPrice * 100),
+        subscription_id: subscriptionId,
+        // amount: Math.round(finalPrice * 100),
         currency: "INR",
         name: "Chartr",
         description: `${plan.name} Plan`,
-
         prefill: {
           name: user.username,
           contact: user.phone,
         },
-
         theme: { color: "#7c3aed" },
+        handler: async function (res: any) {
 
-        handler: async function () {
+
           try {
+            // payment completed
 
-            const expiresAt = getExpiryDatePlusOneMonth(plan.name);
+            const expiresAt = subscriptionExpireAt(plan.name);
 
             const updateData: any = {
               plan: plan.name,
@@ -129,7 +134,8 @@ const ReNewPlan = () => {
               updateData.referredDevices = increment(-1);
             }
 
-            await updateDoc(userRef, updateData);
+            const user = await updateDoc(userRef, updateData);
+            console.log("User document updated:", user);
 
             // transaction history
             const userPassDocRef = doc(db, 'transactions', "history");
@@ -145,12 +151,13 @@ const ReNewPlan = () => {
                 passes: [finalData],
               });
             }
-            
+
             alert(
               hasReferral
                 ? "✅ Plan activated with ₹150 discount!"
                 : "✅ Plan activated!"
             );
+            navigate("/");
           } catch (err) {
             console.error(err);
             alert("Payment succeeded but update failed.");
@@ -163,6 +170,7 @@ const ReNewPlan = () => {
           },
         },
       };
+
 
       const rzp = new window.Razorpay(options);
 
@@ -196,61 +204,60 @@ const ReNewPlan = () => {
 
   return (
     <div className="max-w-md mx-auto border flex items-center justify-center flex-col gap-5 py-5">
-      {plans.map((p: any) => {
-        const discountedPrice = referralAvailable
-          ? Math.max(p.price - 150, 1)
-          : p.price;
 
-        return (
-          <div key={p.name} className="card">
-            <div className="pricing-block-content">
+      {referralAvailable > 0 && <div>
+        <p>{referralAvailable * 150} will be refunded to your account </p>
+      </div>
+      }
+      {
+        plans.map((p: any) => {
+          const finalPirce = getDiscountPirce(p.price, referralAvailable)
+          return (
+            <div key={p.name} className="card">
+              <div className="pricing-block-content">
+                <p className="pricing-plan capitalize">{p.name}</p>
+                <div className="price-value">
+                  <p className="price-number">
 
-              <p className="pricing-plan capitalize">{p.name}</p>
-
-              <div className="price-value">
-                <p className="price-number">
-                  {referralAvailable && (
-                    <span className="line-through text-gray-400 mr-2 text-sm">
-                      ₹{p.price}
+                    ₹
+                    <span className="price-integer">
+                      {finalPirce}
                     </span>
-                  )}
-                  ₹
-                  <span className="price-integer">
-                    {discountedPrice}
-                  </span>
-                </p>
+                  </p>
+                </div>
+
+                {referralAvailable > 0 && (
+                  <p className="text-xs text-gray-900">
+                    🎉 ₹{referralAvailable * 150} referral discount applied
+                  </p>
+                )}
+
+                <div className="pricing-note">{p.duration}</div>
+
+                <ul className="check-list">
+                  {p.features.map((f: any, i: number) => (
+                    <li key={i} className="check-list-item">
+                      {f.available ? "✔️" : "❌"} {f.title}
+                    </li>
+                  ))}
+                </ul>
+
+                <button
+                  onClick={() => handlePayment(p)}
+                  className="bg-black text-white py-2 rounded-xl cursor-pointer w-full"
+                >
+                  Pay ₹{finalPirce}
+                </button>
+
               </div>
-
-              {/* 🔥 SHOW DISCOUNT MESSAGE */}
-              {referralAvailable && (
-                <p className="text-xs text-green-500">
-                  🎉 ₹150 referral discount applied
-                </p>
-              )}
-
-              <div className="pricing-note">{p.duration}</div>
-
-              <ul className="check-list">
-                {p.features.map((f: any, i: number) => (
-                  <li key={i} className="check-list-item">
-                    {f.available ? "✔️" : "❌"} {f.title}
-                  </li>
-                ))}
-              </ul>
-
-              <button
-                onClick={() => openRazorpay(p)}
-                className="bg-black text-white py-2 rounded-xl cursor-pointer w-full"
-              >
-                Pay ₹{discountedPrice}
-              </button>
-
             </div>
-          </div>
-        );
-      })}
-    </div>
+          );
+        })
+      }
+    </div >
   );
 };
 
 export default ReNewPlan;
+
+
