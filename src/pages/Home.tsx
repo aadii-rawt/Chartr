@@ -17,11 +17,12 @@ import { doc, getDoc } from 'firebase/firestore';
 import { useUser } from '../context/UserContext';
 import { db } from '../../firebase';
 import RenewModal from '../components/RenewModal';
+import Refer from '../components/Refer';
 
 
 const Home = () => {
 
-  const { user, data, setData, isExpired, setIsExpired } = useUser()
+  const { user, data, setData, isExpired, setIsExpired,showRefer } = useUser()
 
   const [showRenew, setRenew] = useState(true)
 
@@ -46,7 +47,7 @@ const Home = () => {
 
   useEffect(() => {
     console.log(data);
-    
+
     if (!data) return;
     const res = checkPlan(data?.plan, data)
     if (!res.ok) {
@@ -107,7 +108,7 @@ const Home = () => {
 
 
       {/* {showRenew && <RenewModal setRenew={setRenew} />} */}
-      
+      {showRefer && <Refer />}
     </div>
   );
 };

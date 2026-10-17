@@ -67,27 +67,9 @@ const SelectPlan = () => {
                 status: ""
             }
 
-            let subscriptionId;
-            try {
-                const data = await api.post("/subscription/create", {
-                    // planId: "plan_TfxopItQSqKgWJ"
-                    planId: plan.id
-                })
-                subscriptionId = data.data?.data.id;
-            } catch (error) {
-                console.error("Error creating subscription:", error);
-            }
-
-            if (!subscriptionId) {
-                alert("Failed to create subscription. Please try again.");
-                return;
-            }
-
-
             const options = {
                 key: keyId,
-                // amount: Math.round(finalPrice * 100),
-                subscription_id: subscriptionId,
+                amount: Math.round(finalPrice * 100),
                 currency: "INR",
                 name: "Chartr",
                 description: `${plan.name} Plan`,

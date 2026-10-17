@@ -43,29 +43,36 @@ useEffect(() => {
       setLoading(false)
     }
   };
-
   load();
 }, []);
-  // Search filter
+ 
+
+
+  // Sort latest transactions first, then apply search
   const filtered = useMemo(() => {
+    const sorted = [...transactions].sort((a, b) => {
+      const dateA = a.date?.toDate
+        ? a.date.toDate().getTime()
+        : 0;
+
+      const dateB = b.date?.toDate
+        ? b.date.toDate().getTime()
+        : 0;
+
+      return dateB - dateA;
+    });
+
     const s = search.trim().toLowerCase();
 
-    if (!s) return transactions;
+    if (!s) return sorted;
 
-    return transactions.filter((t) => {
-      return (
-        (t.username || "")
-          .toLowerCase()
-          .includes(s) ||
-        (t.plan || "")
-          .toLowerCase()
-          .includes(s) ||
-        (t.status || "")
-          .toLowerCase()
-          .includes(s)
-      );
-    });
+    return sorted.filter((t) =>
+      (t.username || "").toLowerCase().includes(s) ||
+      (t.plan || "").toLowerCase().includes(s) ||
+      (t.status || "").toLowerCase().includes(s)
+    );
   }, [transactions, search]);
+
 
   // Pagination
   const totalPages = Math.max(
